@@ -4,35 +4,38 @@ package main
 import (
 	"flag"
 	"fmt"
+	"go_course_4/go_search/pkg/crawler"
 	"go_course_4/go_search/pkg/crawler/spider"
 )
 
 const (
-	crawlerDepth = 1
-	flagMsg      = "Add request for searching in recieved collection"
-	errMsg       = "Someting went wrong, check internet connection"
+	depth   = 1
+	flagMsg = "Add request for searching in recieved collection"
+	errMsg  = "Someting went wrong, check internet connection"
 )
 
 func main() {
-	urls := [2]string{"https://golang.org", "https://go.dev"}
-
-	s := spider.New()
-
-	for _, url := range urls {
-		links, err := s.Scan(url, crawlerDepth)
-		if err != nil {
-			fmt.Println(errMsg)
-		}
-		fmt.Println(links)
-	}
+	urls := []string{"https://golang.org", "https://go.dev"}
 
 	sFlag := flag.String("s", "", "Search")
-
 	flag.Parse()
 
 	if len(*sFlag) == 0 {
 		fmt.Println(flagMsg)
 	}
 
-	fmt.Println(urls, *sFlag)
+	var docs []crawler.Document
+	s := spider.New()
+
+	for _, u := range urls {
+		links, err := s.Scan(u, depth)
+		if err != nil {
+			fmt.Println(errMsg)
+		}
+		for _, l := range links {
+			docs = append(docs, l)
+		}
+		fmt.Println(links)
+	}
+	fmt.Println(docs)
 }
