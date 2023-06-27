@@ -1,4 +1,4 @@
-module search
+module go_course_4
 
 go 1.20
 
