@@ -6,23 +6,21 @@ import (
 	"fmt"
 	"go-course-4/go-search/pkg/crawler"
 	"go-course-4/go-search/pkg/crawler/spider"
+	"log"
 	"strings"
 )
 
-const (
-	depth   = 1
-	flagMsg = "Add request for searching in recieved collection"
-	errMsg  = "Someting went wrong, check internet connection"
-)
+const depth = 1
 
 func main() {
 	urls := []string{"https://golang.org", "https://go.dev"}
 
-	sFlag := flag.String("s", "", "go language")
+	// third parameter set a default value
+	sFlag := flag.String("s", "", "go")
 	flag.Parse()
 
 	if len(*sFlag) == 0 {
-		fmt.Println(flagMsg)
+		flag.PrintDefaults()
 	}
 
 	var docs []crawler.Document
@@ -31,7 +29,7 @@ func main() {
 	for _, u := range urls {
 		links, err := s.Scan(u, depth)
 		if err != nil {
-			fmt.Println(errMsg)
+			log.Fatal(err)
 		}
 		for _, l := range links {
 			docs = append(docs, l)
@@ -39,7 +37,7 @@ func main() {
 	}
 
 	for _, d := range docs {
-		if strings.Contains(strings.ToLower(d.Title), strings.ToLower(*sFlag)) {
+		if strings.Contains(d.Title, strings.ToLower(*sFlag)) {
 			fmt.Printf("`%s` found: %s\n", *sFlag, d.URL)
 		}
 	}
