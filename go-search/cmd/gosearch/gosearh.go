@@ -4,8 +4,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"go_course_4/go_search/pkg/crawler"
-	"go_course_4/go_search/pkg/crawler/spider"
+	"go-course-4/go-search/pkg/crawler"
+	"go-course-4/go-search/pkg/crawler/spider"
+	"strings"
 )
 
 const (
@@ -17,7 +18,7 @@ const (
 func main() {
 	urls := []string{"https://golang.org", "https://go.dev"}
 
-	sFlag := flag.String("s", "", "Search")
+	sFlag := flag.String("s", "", "go language")
 	flag.Parse()
 
 	if len(*sFlag) == 0 {
@@ -35,7 +36,11 @@ func main() {
 		for _, l := range links {
 			docs = append(docs, l)
 		}
-		fmt.Println(links)
 	}
-	fmt.Println(docs)
+
+	for _, d := range docs {
+		if strings.Contains(strings.ToLower(d.Title), strings.ToLower(*sFlag)) {
+			fmt.Printf("`%s` found: %s\n", *sFlag, d.URL)
+		}
+	}
 }

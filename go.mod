@@ -1,4 +1,4 @@
-module go_course_4
+module go-course-4
 
 go 1.20
 
