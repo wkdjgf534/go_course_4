@@ -4,13 +4,13 @@ package main
 import (
 	"flag"
 	"fmt"
-	"go-course-4/homework-01/pkg/crawler"
-	"go-course-4/homework-01/pkg/crawler/spider"
+	"go-course-4/homework-02/pkg/crawler"
+	"go-course-4/homework-02/pkg/crawler/spider"
 	"strings"
 )
 
 const (
-	depth   = 1
+	depth   = 2
 	flagMsg = "Use parameter -s and add a preferable string for searching"
 	errMsg  = "Someting went wrong"
 )
@@ -28,17 +28,25 @@ func main() {
 
 	var docs []crawler.Document
 	s := spider.New()
+	//i := index.New()
+	count := 0
 
 	for _, u := range urls {
 		links, err := s.Scan(u, depth)
 		if err != nil {
 			fmt.Println(errMsg)
 		}
-		docs = append(docs, links...)
+
+		for _, l := range links {
+			l.ID = count
+			docs = append(docs, l)
+			count++
+		}
 	}
+
 	for _, d := range docs {
 		if strings.Contains(strings.ToLower(d.Title), strings.ToLower(*sFlag)) {
-			fmt.Printf("%s found: %s\n", *sFlag, d.URL)
+			fmt.Printf("%s found: %v\n", *sFlag, d)
 		}
 	}
 }
