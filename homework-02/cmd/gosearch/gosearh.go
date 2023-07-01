@@ -7,12 +7,11 @@ import (
 	"go-course-4/homework-02/pkg/crawler"
 	"go-course-4/homework-02/pkg/crawler/spider"
 	"go-course-4/homework-02/pkg/index"
-	"strings"
 )
 
 const (
 	depth   = 1
-	flagMsg = "Use parameter -s and add a preferable string for searching"
+	flagMsg = "Use parameter -s and add a preferable key words (-s \"go test rest\")"
 	errMsg  = "Someting went wrong"
 )
 
@@ -37,18 +36,20 @@ func main() {
 		if err != nil {
 			fmt.Println(errMsg)
 		}
-
+		//docs = append(docs, links...)
 		for _, l := range links {
 			l.ID = count
 			docs = append(docs, l)
-			i.Add(l.URL)
 			count++
 		}
 	}
 
-	for _, d := range docs {
-		if strings.Contains(strings.ToLower(d.Title), strings.ToLower(*sFlag)) {
-			fmt.Printf("%s found: %v\n", *sFlag, d)
-		}
-	}
+	i.Add(*sFlag, &docs)
+	fmt.Println(i)
+
+	//for _, d := range docs {
+	//	if strings.Contains(strings.ToLower(d.Title), strings.ToLower(*sFlag)) {
+	//		fmt.Printf("%s found: %v\n", *sFlag, d)
+	//	}
+	//}
 }
