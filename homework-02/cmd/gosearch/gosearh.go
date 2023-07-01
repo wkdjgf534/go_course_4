@@ -6,11 +6,12 @@ import (
 	"fmt"
 	"go-course-4/homework-02/pkg/crawler"
 	"go-course-4/homework-02/pkg/crawler/spider"
+	"go-course-4/homework-02/pkg/index"
 	"strings"
 )
 
 const (
-	depth   = 2
+	depth   = 1
 	flagMsg = "Use parameter -s and add a preferable string for searching"
 	errMsg  = "Someting went wrong"
 )
@@ -28,7 +29,7 @@ func main() {
 
 	var docs []crawler.Document
 	s := spider.New()
-	//i := index.New()
+	i := index.New()
 	count := 0
 
 	for _, u := range urls {
@@ -40,6 +41,7 @@ func main() {
 		for _, l := range links {
 			l.ID = count
 			docs = append(docs, l)
+			i.Add(l.URL)
 			count++
 		}
 	}
