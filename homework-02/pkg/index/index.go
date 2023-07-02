@@ -1,6 +1,7 @@
 package index
 
 import (
+	"fmt"
 	"go-course-4/homework-02/pkg/crawler"
 	"strings"
 )
@@ -10,6 +11,9 @@ type Service struct {
 	words map[string][]int
 }
 
+// Преобразование строки в slice строк
+func strToSlice(str string) []string { return strings.Fields(strings.ToLower(str)) }
+
 // New - конструктор службы инвертированного индексирования.
 func New() *Service {
 	i := Service{}
@@ -17,18 +21,23 @@ func New() *Service {
 	return &i
 }
 
-// Add - добавление слова и id документа в map
-func (i *Service) Add(str string, docs *[]crawler.Document) {
-	strs := strings.Fields(str) // Строку преобразуем в массив
-	for _, s := range strs {
-		for _, d := range *docs {
-			if strings.Contains(strings.ToLower(d.Title), strings.ToLower(s)) {
-				i.words[s] = append(i.words[s], d.ID)
-			}
+// Add - добавление слов и ids документов в map
+func (i *Service) Add(docs *[]crawler.Document) {
+	for _, d := range *docs {
+		arrStr := strToSlice(d.Title)
+		for _, s := range arrStr {
+			i.words[s] = append(i.words[s], d.ID)
 		}
 	}
 }
 
-// Search - бинарный поиск по индексам документов
-func (i *Service) Search() {
+// Search - поиск в map по ключевым словам и получение ids документов
+func (i *Service) Search(str string) {
+	var ids = []int{}
+	arrStr := strToSlice(str)
+	for _, s := range arrStr {
+		fmt.Printf("%T", i.words[s])
+		ids = append(ids, i.words[s])
+	}
+	fmt.Println(ids)
 }

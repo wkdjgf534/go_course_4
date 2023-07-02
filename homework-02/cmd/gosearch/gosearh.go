@@ -36,7 +36,7 @@ func main() {
 		if err != nil {
 			fmt.Println(errMsg)
 		}
-		//docs = append(docs, links...)
+
 		for _, l := range links {
 			l.ID = count
 			docs = append(docs, l)
@@ -44,12 +44,9 @@ func main() {
 		}
 	}
 
-	i.Add(*sFlag, &docs)
+	i.Add(&docs)
 	fmt.Println(i)
+	i.Search(*sFlag)
+	//strs := strings.Fields(str) // Строку преобразуем в массив
 
-	//for _, d := range docs {
-	//	if strings.Contains(strings.ToLower(d.Title), strings.ToLower(*sFlag)) {
-	//		fmt.Printf("%s found: %v\n", *sFlag, d)
-	//	}
-	//}
 }
