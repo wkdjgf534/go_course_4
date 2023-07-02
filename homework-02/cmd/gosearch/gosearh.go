@@ -7,6 +7,7 @@ import (
 	"go-course-4/homework-02/pkg/crawler"
 	"go-course-4/homework-02/pkg/crawler/spider"
 	"go-course-4/homework-02/pkg/index"
+	"strings"
 )
 
 const (
@@ -47,7 +48,7 @@ func main() {
 
 	index.Add(&docs)
 
-	idx := index.Ids(*sFlag)
+	idx := index.Ids(strings.ToLower(*sFlag))
 	if len(idx) == 0 {
 		fmt.Println(unsMsg)
 	}
