@@ -28,8 +28,8 @@ func main() {
 
 	var docs []crawler.Document
 	s := spider.New()
-	i := index.New()
-	counter := 1
+	index := index.New()
+	counter := 0
 
 	for _, u := range urls {
 		links, err := s.Scan(u, depth)
@@ -44,14 +44,23 @@ func main() {
 		}
 	}
 
-	i.Add(&docs)
-	idx := i.Ids(*sFlag)
-	min, max := docs[0].ID, docs[len(docs)-1].ID
-	for _, i := range idx {
-		for _, d := docs {
-			for min <= max {
-				mid := (min + max) / 2
+	index.Add(&docs)
 
+	idx := index.Ids(*sFlag)
+	min, max := docs[0].ID, docs[len(docs)-1].ID
+
+	for _, i := range idx {
+		fmt.Println(i)
+		for min <= max {
+			fmt.Println(min, max)
+			mid := (min + max) / 2
+			if docs[mid].ID == i {
+				fmt.Println(docs[mid].URL)
+			}
+			if docs[mid].ID < i {
+				min = mid + 1
+			} else {
+				max = mid - 1
 			}
 		}
 	}

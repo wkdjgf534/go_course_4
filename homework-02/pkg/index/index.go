@@ -30,10 +30,11 @@ func (i *Service) Add(docs *[]crawler.Document) {
 	}
 }
 
-// Ids - получение ууникальны ID документов по ключевому слову
+// Ids - получение ID документов по ключевому слову
 func (i *Service) Ids(str string) []int {
 	var ids = []int{}
 	arrStr := strToSlice(str)
+
 	for _, s := range arrStr {
 		ids = append(ids, i.words[s]...)
 	}
