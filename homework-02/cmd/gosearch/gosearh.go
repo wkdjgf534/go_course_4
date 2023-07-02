@@ -29,7 +29,7 @@ func main() {
 	var docs []crawler.Document
 	s := spider.New()
 	i := index.New()
-	count := 0
+	counter := 1
 
 	for _, u := range urls {
 		links, err := s.Scan(u, depth)
@@ -38,15 +38,40 @@ func main() {
 		}
 
 		for _, l := range links {
-			l.ID = count
+			l.ID = counter
 			docs = append(docs, l)
-			count++
+			counter++
 		}
 	}
 
 	i.Add(&docs)
-	fmt.Println(i)
-	i.Search(*sFlag)
-	//strs := strings.Fields(str) // Строку преобразуем в массив
+	idx := i.Ids(*sFlag)
+	min, max := docs[0].ID, docs[len(docs)-1].ID
+	for _, i := range idx {
+		for _, d := docs {
+			for min <= max {
+				mid := (min + max) / 2
 
+			}
+		}
+	}
 }
+
+/*
+func Binary(data []int, item int) int {
+	low, high := 0, len(data)-1
+	for low <= high {
+		mid := (low + high) / 2
+		if data[mid] == item {
+			return mid
+		}
+		if data[mid] < item {
+			low = mid + 1
+		} else {
+			high = mid - 1
+		}
+	}
+	return -1
+}
+
+*/
