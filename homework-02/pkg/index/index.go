@@ -31,13 +31,4 @@ func (i *Service) Add(docs *[]crawler.Document) {
 }
 
 // Ids - получение ID документов по ключевому слову
-func (i *Service) Ids(str string) []int {
-	var ids = []int{}
-	arrStr := strToSlice(str)
-
-	for _, s := range arrStr {
-		ids = append(ids, i.words[s]...)
-	}
-
-	return ids
-}
+func (i *Service) Ids(str string) []int { return i.words[str] }

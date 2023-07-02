@@ -11,8 +11,9 @@ import (
 
 const (
 	depth   = 1
-	flagMsg = "Use parameter -s and add a preferable key words (-s \"go test rest\")"
+	flagMsg = "Use parameter -s and add a preferable key word (-s go)"
 	errMsg  = "Someting went wrong"
+	unsMsg  = "Have not found any documents according to your key word"
 )
 
 func main() {
@@ -47,17 +48,18 @@ func main() {
 	index.Add(&docs)
 
 	idx := index.Ids(*sFlag)
-	min, max := docs[0].ID, docs[len(docs)-1].ID
+	if len(idx) == 0 {
+		fmt.Println(unsMsg)
+	}
 
 	for _, i := range idx {
-		fmt.Println(i)
+		min, max := docs[0].ID, docs[len(docs)-1].ID
 		for min <= max {
-			fmt.Println(min, max)
 			mid := (min + max) / 2
 			if docs[mid].ID == i {
-				fmt.Println(docs[mid].URL)
-			}
-			if docs[mid].ID < i {
+				fmt.Println("found document id:", i, "URL:", docs[mid].URL)
+				break
+			} else if docs[mid].ID < i {
 				min = mid + 1
 			} else {
 				max = mid - 1
@@ -65,22 +67,3 @@ func main() {
 		}
 	}
 }
-
-/*
-func Binary(data []int, item int) int {
-	low, high := 0, len(data)-1
-	for low <= high {
-		mid := (low + high) / 2
-		if data[mid] == item {
-			return mid
-		}
-		if data[mid] < item {
-			low = mid + 1
-		} else {
-			high = mid - 1
-		}
-	}
-	return -1
-}
-
-*/
