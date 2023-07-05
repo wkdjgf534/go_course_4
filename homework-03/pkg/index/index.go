@@ -1,7 +1,7 @@
 package index
 
 import (
-	"go-course-4/homework-02/pkg/crawler"
+	"go-course-4/homework-03/pkg/crawler"
 	"strings"
 )
 
