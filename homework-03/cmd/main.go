@@ -6,6 +6,9 @@ import (
 )
 
 func main() {
-	test := list.New()
-	fmt.Println(test)
+	l := list.New()
+	l.Push(list.Elem{Val: 2})
+	l.Push(list.Elem{Val: 1})
+	fmt.Println(l)
+
 }
