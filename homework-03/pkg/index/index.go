@@ -24,7 +24,7 @@ func New() *Service {
 // Add - добавление слов из заголовка и id документа в map
 func (i *Service) Add(docs *[]crawler.Document) error {
 	if len(*docs) == 0 {
-		return errors.New("Check you internet connection or URL")
+		return errors.New("Check your internet connection or URL")
 	}
 
 	for _, d := range *docs {
