@@ -10,11 +10,8 @@ import (
 	"strings"
 )
 
-const (
-	depth = 1
-)
-
 func main() {
+	depth := 2
 	urls := []string{"https://golang.org", "https://www.practical-go-lessons.com/"}
 	sFlag := flag.String("s", "", "Use parameter -s and add a preferable key word (-s go)")
 	flag.Parse()
