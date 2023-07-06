@@ -25,7 +25,7 @@ func New() *Service {
 func (s *Service) Scan(url string, depth int) (data []crawler.Document, err error) {
 	pages := make(map[string]string)
 
-	parse(url, url, depth, pages)
+	err = parse(url, url, depth, pages)
 
 	for url, title := range pages {
 		item := crawler.Document{
@@ -35,7 +35,7 @@ func (s *Service) Scan(url string, depth int) (data []crawler.Document, err erro
 		data = append(data, item)
 	}
 
-	return data, nil
+	return data, err
 }
 
 // parse рекурсивно обходит ссылки на странице, переданной в url.

@@ -16,7 +16,6 @@ const (
 
 func main() {
 	urls := []string{"https://golang.org", "https://www.practical-go-lessons.com/"}
-
 	sFlag := flag.String("s", "", "Use parameter -s and add a preferable key word (-s go)")
 	flag.Parse()
 
@@ -33,7 +32,8 @@ func main() {
 	for _, u := range urls {
 		links, err := s.Scan(u, depth)
 		if err != nil {
-			fmt.Println("Someting went wrong")
+			fmt.Printf("We got an error: %s\n", err)
+			continue
 		}
 
 		for _, l := range links {
@@ -43,15 +43,18 @@ func main() {
 		}
 	}
 
-	index.Add(&docs)
-
-	idx := index.Ids(strings.ToLower(*sFlag))
-	if len(idx) == 0 {
-		fmt.Println("Have not found any documents according to your key word")
+	err := index.Add(&docs)
+	if err != nil {
+		fmt.Print(err)
 		return
 	}
 
-	fmt.Println("test")
+	idx, err := index.Ids(strings.ToLower(*sFlag))
+	if err != nil {
+		fmt.Println(err)
+
+	}
+
 	for _, i := range idx {
 		min, max := docs[0].ID, docs[len(docs)-1].ID
 		for min <= max {
