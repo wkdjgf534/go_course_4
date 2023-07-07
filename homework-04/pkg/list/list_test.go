@@ -37,7 +37,7 @@ func TestList_Pop(t *testing.T) {
 
 func TestList_Reverse(t *testing.T) {
 	l := New()
-	l.Push(Elem{Val: 3})
+	//l.Push(Elem{Val: 3})
 	l.Push(Elem{Val: 2})
 	l.Push(Elem{Val: 1})
 

@@ -21,7 +21,7 @@ func New() *List {
 	var l List
 	l.root = &Elem{Val: 0}
 	l.root.next = l.root
-	l.root.prev = l.root
+	l.root.prev = nil
 	return &l
 }
 
@@ -52,11 +52,10 @@ func (l *List) String() string {
 
 // Pop удаляет первый элемент списка.
 func (l *List) Pop() *List {
-	l.root.prev = l.root.next
-	l.root.next = l.root.next.next
-	fmt.Println("тек", *l.root)
-	fmt.Println("след", *l.root.next)
-	fmt.Println("пред", *l.root.prev)
+	re := l.root
+	el := l.root.next
+	re.prev = re.next
+	re.next = el.next
 	return l
 }
 
