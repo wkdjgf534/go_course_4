@@ -19,7 +19,7 @@ type Elem struct {
 // New создаёт список и возвращает указатель на него.
 func New() *List {
 	var l List
-	l.root = &Elem{Val: 0}
+	l.root = &Elem{}
 	l.root.next = l.root
 	l.root.prev = l.root
 	return &l
