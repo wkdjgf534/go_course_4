@@ -21,7 +21,7 @@ func New() *List {
 	var l List
 	l.root = &Elem{Val: 0}
 	l.root.next = l.root
-	l.root.prev = nil
+	l.root.prev = l.root
 	return &l
 }
 
@@ -61,19 +61,17 @@ func (l *List) Pop() *List {
 
 // Reverse разворачивает список.
 func (l *List) Reverse() *List {
-	fmt.Println(l)
 	re := l.root
 	el := l.root.next
-	if el != re {
-		for el != re {
-			fmt.Println("before root:", re)
-			fmt.Println("before next elem:", re)
-			tmp := *el
-			el.prev = tmp.next
-			el.next = tmp.prev
-			el = tmp.next
-			fmt.Println("after next elem:", el)
-		}
+	for el.next != re {
+		tmp := *el
+		el.prev = tmp.next
+		el.next = tmp.prev
+		el = tmp.next
 	}
+	tmp := *el
+	l.root.next = el
+	el.next = tmp.prev
+	el.prev = l.root
 	return l
 }

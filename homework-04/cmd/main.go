@@ -12,6 +12,8 @@ func main() {
 	l.Push(list.Elem{Val: 2})
 	l.Push(list.Elem{Val: 1})
 	fmt.Println(l)
+	l.Reverse()
+	fmt.Println(l)
 	l.Pop()
 	l.Pop()
 	fmt.Println(l)
