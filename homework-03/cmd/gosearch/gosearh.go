@@ -40,17 +40,9 @@ func main() {
 		}
 	}
 
-	err := index.Add(&docs)
-	if err != nil {
-		fmt.Print(err)
-		return
-	}
+	index.Add(&docs)
 
-	idx, err := index.Ids(strings.ToLower(*sFlag))
-	if err != nil {
-		fmt.Println(err)
-
-	}
+	idx := index.Ids(strings.ToLower(*sFlag))
 
 	for _, i := range idx {
 		min, max := docs[0].ID, docs[len(docs)-1].ID

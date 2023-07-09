@@ -1,7 +1,6 @@
 package index
 
 import (
-	"errors"
 	"go-course-4/homework-03/pkg/crawler"
 	"strings"
 )
@@ -23,10 +22,6 @@ func New() *Service {
 
 // Add - добавление слов из заголовка и id документа в map
 func (i *Service) Add(docs *[]crawler.Document) error {
-	if len(*docs) == 0 {
-		return errors.New("Check your internet connection or URL")
-	}
-
 	for _, d := range *docs {
 		arrStr := strToSlice(d.Title)
 		for _, s := range arrStr {
@@ -37,11 +32,4 @@ func (i *Service) Add(docs *[]crawler.Document) error {
 }
 
 // Ids - получение ID документов по ключевому слову
-func (i *Service) Ids(str string) ([]int, error) {
-	ids := i.words[str]
-
-	if ids == nil {
-		return nil, errors.New("Have not found any documents according to your key word")
-	}
-	return ids, nil
-}
+func (i *Service) Ids(str string) []int { return i.words[str] }
