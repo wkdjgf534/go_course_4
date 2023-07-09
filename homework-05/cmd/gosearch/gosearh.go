@@ -7,11 +7,13 @@ import (
 	"go-course-4/homework-05/pkg/crawler"
 	"go-course-4/homework-05/pkg/crawler/spider"
 	"go-course-4/homework-05/pkg/index"
+	"go-course-4/homework-05/pkg/storage"
 	"strings"
 )
 
 func main() {
-	depth := 2
+	depth := 1
+	name := "backup"
 	urls := []string{"https://golang.org", "https://www.practical-go-lessons.com/"}
 	sFlag := flag.String("s", "", "Use parameter -s and add a preferable key word (-s go)")
 	flag.Parse()
@@ -23,7 +25,8 @@ func main() {
 
 	var docs []crawler.Document
 	s := spider.New()
-	index := index.New()
+	i := index.New()
+	st := storage.New()
 	counter := 0
 
 	for _, u := range urls {
@@ -40,9 +43,12 @@ func main() {
 		}
 	}
 
-	index.Add(&docs)
+	if len(docs) > 0 {
+		st.Save(&docs, name)
+		//i.Add(&docs)
+	}
 
-	idx := index.Ids(strings.ToLower(*sFlag))
+	idx := i.Ids(strings.ToLower(*sFlag))
 
 	for _, i := range idx {
 		min, max := docs[0].ID, docs[len(docs)-1].ID
