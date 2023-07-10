@@ -2,9 +2,8 @@ package storage
 
 import (
 	"encoding/json"
-	"fmt"
 	"go-course-4/homework-05/pkg/crawler"
-	"os"
+	"io"
 )
 
 // Service - служба хранения результата службы сканирования.
@@ -17,6 +16,21 @@ func New() *Service {
 }
 
 // Save - сохраняет результат поиска в файл.
+func (s *Service) Save(docs *[]crawler.Document, w io.Writer) error {
+	j, err := json.Marshal(*docs)
+	if err != nil {
+		return err
+	}
+
+	_, err = w.Write(j)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+/*
 func (s *Service) Save(docs *[]crawler.Document, name string) error {
 	f, err := os.Create(name)
 	if err != nil {
@@ -24,16 +38,17 @@ func (s *Service) Save(docs *[]crawler.Document, name string) error {
 	}
 
 	defer f.Close()
+	fmt.Println(*docs)
 
-	j, err := json.Marshal(docs)
+	j, err := json.Marshal(*docs)
 	if err != nil {
 		return err
 	}
 	fmt.Println(j)
 
-	//d := make([]crawler.Document, 0)
-	//json.Unmarshal(j, d)
-	//fmt.Println(d)
+	var d []crawler.Document
+	json.Unmarshal(j, d)
+	fmt.Println(d)
 	return nil
 }
 
@@ -41,3 +56,4 @@ func (s *Service) Save(docs *[]crawler.Document, name string) error {
 //func (s *Service) Load(name string) ([]crawler.Document, error) {
 //	return s
 //}
+*/

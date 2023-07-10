@@ -8,12 +8,14 @@ import (
 	"go-course-4/homework-05/pkg/crawler/spider"
 	"go-course-4/homework-05/pkg/index"
 	"go-course-4/homework-05/pkg/storage"
+	"log"
+	"os"
 	"strings"
 )
 
 func main() {
 	depth := 1
-	name := "backup"
+	name := "./backup.txt"
 	urls := []string{"https://golang.org", "https://www.practical-go-lessons.com/"}
 	sFlag := flag.String("s", "", "Use parameter -s and add a preferable key word (-s go)")
 	flag.Parse()
@@ -34,12 +36,22 @@ func main() {
 			fmt.Printf("We got an error: %s\n", err)
 			continue
 		}
+
 		docs = append(docs, links...)
 	}
 
-	if len(docs) > 0 {
-		st.Save(&docs, name)
-		i.Add(&docs)
+
+		f, err := os.Create(name)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer f.Close()
+
+		err = st.Save(&docs, f)
+		if err != nil {
+			log.Fatal(err)
+		}
+		//i.Add(&docs)
 	}
 
 	idx := i.Ids(strings.ToLower(*sFlag))
