@@ -27,7 +27,6 @@ func main() {
 	s := spider.New()
 	i := index.New()
 	st := storage.New()
-	counter := 0
 
 	for _, u := range urls {
 		links, err := s.Scan(u, depth)
@@ -35,17 +34,12 @@ func main() {
 			fmt.Printf("We got an error: %s\n", err)
 			continue
 		}
-
-		for _, l := range links {
-			l.ID = counter
-			docs = append(docs, l)
-			counter++
-		}
+		docs = append(docs, links...)
 	}
 
 	if len(docs) > 0 {
 		st.Save(&docs, name)
-		//i.Add(&docs)
+		i.Add(&docs)
 	}
 
 	idx := i.Ids(strings.ToLower(*sFlag))
