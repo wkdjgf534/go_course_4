@@ -12,13 +12,11 @@ import (
 
 // Service - служба поискового робота.
 type Service struct {
-	id int
 }
 
 // New - констрктор службы поискового робота.
 func New() *Service {
 	s := Service{}
-	s.id = 0
 	return &s
 }
 
@@ -29,13 +27,14 @@ func (s *Service) Scan(url string, depth int) (data []crawler.Document, err erro
 
 	err = parse(url, url, depth, pages)
 
+	c := 0
 	for url, title := range pages {
 		item := crawler.Document{
-			ID:    s.id,
+			ID:    c,
 			URL:   url,
 			Title: title,
 		}
-		s.id++
+		c++
 		data = append(data, item)
 	}
 

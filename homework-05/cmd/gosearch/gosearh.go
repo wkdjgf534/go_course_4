@@ -36,23 +36,20 @@ func main() {
 			fmt.Printf("We got an error: %s\n", err)
 			continue
 		}
-
 		docs = append(docs, links...)
 	}
 
-
-		f, err := os.Create(name)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer f.Close()
-
-		err = st.Save(&docs, f)
-		if err != nil {
-			log.Fatal(err)
-		}
-		//i.Add(&docs)
+	f, err := os.Create(name)
+	if err != nil {
+		log.Fatal(err)
 	}
+	defer f.Close()
+
+	err = st.Save(&docs, f)
+	if err != nil {
+		log.Fatal(err)
+	}
+	i.Add(&docs)
 
 	idx := i.Ids(strings.ToLower(*sFlag))
 

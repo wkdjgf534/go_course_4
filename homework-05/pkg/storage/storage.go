@@ -30,30 +30,15 @@ func (s *Service) Save(docs *[]crawler.Document, w io.Writer) error {
 	return nil
 }
 
-/*
-func (s *Service) Save(docs *[]crawler.Document, name string) error {
-	f, err := os.Create(name)
-	if err != nil {
-		return err
-	}
-
-	defer f.Close()
-	fmt.Println(*docs)
-
-	j, err := json.Marshal(*docs)
-	if err != nil {
-		return err
-	}
-	fmt.Println(j)
-
-	var d []crawler.Document
-	json.Unmarshal(j, d)
-	fmt.Println(d)
-	return nil
-}
-
 // Load - загружает результат поиска из файла.
-//func (s *Service) Load(name string) ([]crawler.Document, error) {
-//	return s
-//}
-*/
+func (s *Service) Load(r io.Reader) ([]crawler.Document, error) {
+	var docs []crawler.Document
+
+	data, err := io.ReadAll(r)
+	if err != nil {
+		return nil, err
+	}
+
+	json.Unmarshal(data, &docs)
+	return docs, nil
+}
