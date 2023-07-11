@@ -13,7 +13,7 @@ import (
 )
 
 // read - Чтение из файла
-func read(name string, st *storage.Service) ([]crawler.Document, error) {
+func read(name string, st storage.Service) ([]crawler.Document, error) {
 	f, err := os.Open(name)
 	if err != nil {
 		return nil, err
@@ -28,7 +28,7 @@ func read(name string, st *storage.Service) ([]crawler.Document, error) {
 }
 
 // write - Запись в файл
-func write(docs *[]crawler.Document, name string, st *storage.Service) error {
+func write(docs *[]crawler.Document, name string, st storage.Service) error {
 	f, err := os.Create(name)
 	if err != nil {
 		return err
@@ -59,15 +59,12 @@ func main() {
 	i := index.New()
 	st := storage.New()
 
-	if _, err := os.Stat(fName); err == nil {
-		docs, err := read(fName, st)
-		if err != nil {
-			fmt.Println(err)
-		}
-		fmt.Println("test", docs)
+	docs, err := read(fName, *st)
+	if err != nil {
+		fmt.Printf("Error: %s\nWe have to download new data again\n", err)
 	}
 
-	if len(docs) == 0 {
+	if len(docs) == 0 || err != nil {
 		for _, u := range urls {
 			links, err := s.Scan(u, depth)
 			if err != nil {
@@ -75,7 +72,10 @@ func main() {
 				continue
 			}
 			docs = append(docs, links...)
-			write(&docs, fName, st)
+		}
+		err := write(&docs, fName, *st)
+		if err != nil {
+			fmt.Printf("Error: %s\nWe can not write new data to the file\n", err)
 		}
 	}
 

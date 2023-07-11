@@ -26,7 +26,6 @@ func (s *Service) Save(docs *[]crawler.Document, w io.Writer) error {
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
