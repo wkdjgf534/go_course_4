@@ -32,13 +32,15 @@ func (s *Service) Save(docs *[]crawler.Document, w io.Writer) error {
 
 // Load - загружает результат поиска из файла.
 func (s *Service) Load(r io.Reader) ([]crawler.Document, error) {
-	var docs []crawler.Document
-
 	data, err := io.ReadAll(r)
 	if err != nil {
 		return nil, err
 	}
 
-	json.Unmarshal(data, &docs)
+	var docs []crawler.Document
+	err = json.Unmarshal(data, &docs)
+	if err != nil {
+		return nil, err
+	}
 	return docs, nil
 }

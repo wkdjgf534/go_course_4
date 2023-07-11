@@ -8,14 +8,43 @@ import (
 	"go-course-4/homework-05/pkg/crawler/spider"
 	"go-course-4/homework-05/pkg/index"
 	"go-course-4/homework-05/pkg/storage"
-	"log"
 	"os"
 	"strings"
 )
 
+// read - Чтение из файла
+func read(name string, st *storage.Service) ([]crawler.Document, error) {
+	f, err := os.Open(name)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	docs, err := st.Load(f)
+	if err != nil {
+		return nil, err
+	}
+	return docs, nil
+}
+
+// write - Запись в файл
+func write(docs *[]crawler.Document, name string, st *storage.Service) error {
+	f, err := os.Create(name)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	err = st.Save(docs, f)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func main() {
 	depth := 1
-	name := "./backup.txt"
+	fName := "./backup.txt"
 	urls := []string{"https://golang.org", "https://www.practical-go-lessons.com/"}
 	sFlag := flag.String("s", "", "Use parameter -s and add a preferable key word (-s go)")
 	flag.Parse()
@@ -30,25 +59,26 @@ func main() {
 	i := index.New()
 	st := storage.New()
 
-	for _, u := range urls {
-		links, err := s.Scan(u, depth)
+	if _, err := os.Stat(fName); err == nil {
+		docs, err := read(fName, st)
 		if err != nil {
-			fmt.Printf("We got an error: %s\n", err)
-			continue
+			fmt.Println(err)
 		}
-		docs = append(docs, links...)
+		fmt.Println("test", docs)
 	}
 
-	f, err := os.Create(name)
-	if err != nil {
-		log.Fatal(err)
+	if len(docs) == 0 {
+		for _, u := range urls {
+			links, err := s.Scan(u, depth)
+			if err != nil {
+				fmt.Printf("We got an error: %s\n", err)
+				continue
+			}
+			docs = append(docs, links...)
+			write(&docs, fName, st)
+		}
 	}
-	defer f.Close()
 
-	err = st.Save(&docs, f)
-	if err != nil {
-		log.Fatal(err)
-	}
 	i.Add(&docs)
 
 	idx := i.Ids(strings.ToLower(*sFlag))
