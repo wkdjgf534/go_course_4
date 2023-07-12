@@ -1,4 +1,4 @@
-package hw
+package distance
 
 import (
 	"fmt"
