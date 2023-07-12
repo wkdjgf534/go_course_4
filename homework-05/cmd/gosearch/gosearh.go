@@ -20,14 +20,14 @@ const (
 var urls = []string{"https://golang.org", "https://www.practical-go-lessons.com/"}
 
 // read - Чтение из файла
-func read(name string, st storage.Service) ([]crawler.Document, error) {
+func read(name string) ([]crawler.Document, error) {
 	f, err := os.Open(name)
 	if err != nil {
 		return nil, err
 	}
 	defer f.Close()
 
-	docs, err := st.LoadFrom(f)
+	docs, err := storage.LoadFrom(f)
 	if err != nil {
 		return nil, err
 	}
@@ -35,14 +35,14 @@ func read(name string, st storage.Service) ([]crawler.Document, error) {
 }
 
 // write - Запись в файл
-func write(docs *[]crawler.Document, name string, st storage.Service) error {
+func write(docs *[]crawler.Document, name string) error {
 	f, err := os.Create(name)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
 
-	err = st.Save(docs, f)
+	err = storage.Save(docs, f)
 	if err != nil {
 		return err
 	}
@@ -61,9 +61,8 @@ func main() {
 	var docs []crawler.Document
 	s := spider.New()
 	i := index.New()
-	st := storage.New()
 
-	docs, err := read(fName, *st)
+	docs, err := read(fName)
 	if err != nil {
 		fmt.Printf("Error: %s\nWe have to download new data again\n", err)
 	}
@@ -77,7 +76,7 @@ func main() {
 			}
 			docs = append(docs, links...)
 		}
-		err := write(&docs, fName, *st)
+		err := write(&docs, fName)
 		if err != nil {
 			fmt.Printf("Error: %s\nWe can not write new data to the file\n", err)
 		}
