@@ -12,6 +12,13 @@ import (
 	"strings"
 )
 
+const (
+	depth = 1
+	fName = "./backup.txt"
+)
+
+var urls = []string{"https://golang.org", "https://www.practical-go-lessons.com/"}
+
 // read - Чтение из файла
 func read(name string, st storage.Service) ([]crawler.Document, error) {
 	f, err := os.Open(name)
@@ -20,7 +27,7 @@ func read(name string, st storage.Service) ([]crawler.Document, error) {
 	}
 	defer f.Close()
 
-	docs, err := st.Load(f)
+	docs, err := st.LoadFrom(f)
 	if err != nil {
 		return nil, err
 	}
@@ -43,9 +50,6 @@ func write(docs *[]crawler.Document, name string, st storage.Service) error {
 }
 
 func main() {
-	depth := 1
-	fName := "./backup.txt"
-	urls := []string{"https://golang.org", "https://www.practical-go-lessons.com/"}
 	sFlag := flag.String("s", "", "Use parameter -s and add a preferable key word (-s go)")
 	flag.Parse()
 

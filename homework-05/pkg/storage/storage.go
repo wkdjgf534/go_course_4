@@ -29,8 +29,8 @@ func (s *Service) Save(docs *[]crawler.Document, w io.Writer) error {
 	return nil
 }
 
-// Load - загружает результат поиска из файла.
-func (s *Service) Load(r io.Reader) ([]crawler.Document, error) {
+// LoadFrom - загружает результат поиска из файла.
+func (s *Service) LoadFrom(r io.Reader) ([]crawler.Document, error) {
 	data, err := io.ReadAll(r)
 	if err != nil {
 		return nil, err
