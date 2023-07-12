@@ -35,7 +35,7 @@ func read(name string) ([]crawler.Document, error) {
 }
 
 // write - Запись в файл
-func write(docs *[]crawler.Document, name string) error {
+func write(name string, docs *[]crawler.Document) error {
 	f, err := os.Create(name)
 	if err != nil {
 		return err
@@ -76,7 +76,7 @@ func main() {
 			}
 			docs = append(docs, links...)
 		}
-		err := write(&docs, fName)
+		err := write(fName, &docs)
 		if err != nil {
 			fmt.Printf("Error: %s\nWe can not write new data to the file\n", err)
 		}
