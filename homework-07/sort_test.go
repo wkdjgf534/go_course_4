@@ -11,5 +11,5 @@ func Test_sortIntegers(t *testing.T) {
 	if got[0] != want[0] {
 		t.Errorf("got %d, want %d", got, want)
 	}
-	t.Log("ABC")
+	t.Log("When pass an unsorted slice")
 }
