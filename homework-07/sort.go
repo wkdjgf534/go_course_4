@@ -2,8 +2,8 @@ package sort
 
 import "sort"
 
-func sortIntegers(nums []int) { return sort.Ints(nums) }
+func sortIntegers(nums []int) []int { return sort.Ints(nums) }
 
-func sortStrings(str []string) { return sort.Strings(str) }
+func sortStrings(str []string) []string { return sort.Strings(str) }
 
-func sortFloats(nums []int) { return sort.Float64s(nums) }
+func sortFloats(nums []float64) []float64 { return sort.Float64s(nums) }
