@@ -1,6 +1,7 @@
 package sort
 
 import (
+	"math/rand"
 	"reflect"
 	"sort"
 	"testing"
@@ -44,15 +45,21 @@ func Test_sortStrings(t *testing.T) {
 }
 
 func Benchmark_sortInts(b *testing.B) {
-	s := []int{3, 7, 1, 4, 2, 6, 5}
+	nums := rand.Perm(20)
 	for i := 0; i < b.N; i++ {
-		sort.Ints(s)
+		sort.Ints(nums)
 	}
 }
 
 func Benchmark_sortFloat64s(b *testing.B) {
-	f := []float64{3.34, 0.12, 5.56, 1.23, 4.45}
+	min, max := 0.10, 100.10
+	cap := rand.Intn(20)
+	nums := make([]float64, cap)
+	for i := range nums {
+		nums[i] = min + rand.Float64()*(max-min)
+	}
+
 	for i := 0; i < b.N; i++ {
-		sort.Float64s(f)
+		sort.Float64s(nums)
 	}
 }
