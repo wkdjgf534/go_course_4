@@ -38,3 +38,27 @@ func Test_sortStrings(t *testing.T) {
 		})
 	}
 }
+
+func Test_sortFloats(t *testing.T) {
+	type args struct {
+		nums []float64
+	}
+	tests := []struct {
+		name string
+		args args
+		want []float64
+	}{
+		{
+			name: "when passed an unsortered slice of numbers",
+			args: args{nums: []float64{3.34, 0.12, 5.56, 1.23, 4.45}},
+			want: []float64{0.12, 1.23, 3.34, 4.45, 5.56},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := sortFloats(tt.args.nums); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("sortFloats() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
