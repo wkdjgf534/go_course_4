@@ -46,6 +46,8 @@ func Test_sortStrings(t *testing.T) {
 
 func Benchmark_sortInts(b *testing.B) {
 	nums := rand.Perm(20)
+
+	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		sort.Ints(nums)
 	}
@@ -59,6 +61,7 @@ func Benchmark_sortFloat64s(b *testing.B) {
 		nums[i] = min + rand.Float64()*(max-min)
 	}
 
+	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		sort.Float64s(nums)
 	}
