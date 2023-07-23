@@ -16,6 +16,7 @@ type employee struct {
 func MaxAge(p ...any) any {
 	var oldest any
 	maxAge := 0
+
 	for _, v := range p {
 		switch person := v.(type) {
 		case employee:

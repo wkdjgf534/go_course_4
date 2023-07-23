@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"sort"
 )
 
 type ager interface {
@@ -23,14 +22,14 @@ func (c customer) age() int { return c.Age }
 
 // MaxAge - return the eldest person from a collection
 func MaxAge(p ...ager) int {
-	if len(p) == 0 {
-		return 0
-	}
+	maxAge := 0
 
-	sort.Slice(p, func(i, j int) bool {
-		return p[i].age() > p[j].age()
-	})
-	return p[0].age()
+	for _, v := range p {
+		if v.age() > maxAge {
+			maxAge = v.age()
+		}
+	}
+	return maxAge
 }
 
 func main() {
