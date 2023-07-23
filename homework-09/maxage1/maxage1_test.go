@@ -16,9 +16,9 @@ func TestMaxAge(t *testing.T) {
 			name: "when customers only",
 			args: args{
 				p: []ager{
-					&customer{Age: 33},
-					&customer{Age: 55},
-					&customer{Age: 44},
+					customer{Age: 33},
+					customer{Age: 55},
+					customer{Age: 44},
 				},
 			},
 			want: 55,
@@ -27,9 +27,9 @@ func TestMaxAge(t *testing.T) {
 			name: "when employees only",
 			args: args{
 				[]ager{
-					&employee{Age: 33},
-					&employee{Age: 55},
-					&employee{Age: 44},
+					employee{Age: 33},
+					employee{Age: 55},
+					employee{Age: 44},
 				},
 			},
 			want: 55,
@@ -38,11 +38,11 @@ func TestMaxAge(t *testing.T) {
 			name: "when employees and customers",
 			args: args{
 				[]ager{
-					&customer{Age: 77},
-					&employee{Age: 33},
-					&customer{Age: 55},
-					&employee{Age: 44},
-					&customer{Age: 66},
+					customer{Age: 77},
+					employee{Age: 33},
+					customer{Age: 55},
+					employee{Age: 44},
+					customer{Age: 66},
 				},
 			},
 			want: 77,
