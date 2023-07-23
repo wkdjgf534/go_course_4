@@ -1,4 +1,4 @@
-package maxage2
+package main
 
 func MaxAge() {
 
