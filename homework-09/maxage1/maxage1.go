@@ -21,8 +21,6 @@ func (e *employee) age() int { return e.Age }
 
 func (c *customer) age() int { return c.Age }
 
-//type ager interface{ age() int }
-
 // MaxAge - return the eldest person from a collection
 func MaxAge(p ...ager) int {
 	if len(p) == 0 {
