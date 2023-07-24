@@ -48,7 +48,7 @@ func TestMaxAge(t *testing.T) {
 			want: 77,
 		},
 		{
-			name: "when colleection is empty",
+			name: "when collection is empty",
 			args: args{
 				[]ager{},
 			},

@@ -30,6 +30,11 @@ func TestWriteToFile(t *testing.T) {
 			want: "",
 		},
 		{
+			name: "when an empty input",
+			args: args{data: []any{}},
+			want: "",
+		},
+		{
 			name: "when numbers, strings and booleans",
 			args: args{data: []any{true, 1, "One", 2, "Two", 3, "Three", false}},
 			want: "OneTwoThree",
