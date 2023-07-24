@@ -13,25 +13,22 @@ type employee struct {
 }
 
 // MaxAge - return the eldest person from a collection
-func MaxAge(p ...any) any {
+func MaxAge(users ...any) any {
 	var oldest any
 	maxAge := 0
 
-	for _, v := range p {
-		switch person := v.(type) {
+	for _, p := range users {
+		switch v := p.(type) {
 		case employee:
-			if person.Age > maxAge {
-				maxAge = person.Age
-				oldest = person
+			if v.Age > maxAge {
+				maxAge, oldest = v.Age, v
 			}
-
 		case customer:
-			if person.Age > maxAge {
-				maxAge = person.Age
-				oldest = person
+			if v.Age > maxAge {
+				maxAge, oldest = v.Age, v
 			}
 		default:
-			return 0
+			continue
 		}
 	}
 	return oldest
@@ -45,7 +42,7 @@ func main() {
 	e2 := employee{Age: 45}
 
 	fmt.Println(MaxAge())
-	fmt.Println("The eldest person among customer", MaxAge(c1, c2))
-	fmt.Println("The eldest person among employee", MaxAge(e1, e2))
+	fmt.Println("The eldest person among customers", MaxAge(c1, c2))
+	fmt.Println("The eldest person among employees", MaxAge(e1, e2))
 	fmt.Println("The eldest person", MaxAge(c1, c2, e1, e2))
 }

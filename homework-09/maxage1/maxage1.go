@@ -40,7 +40,7 @@ func main() {
 	e2 := employee{Age: 45}
 
 	fmt.Println(MaxAge())
-	fmt.Println("The eldest person among customer", MaxAge(c1, c2))
-	fmt.Println("The eldest person among employee", MaxAge(e1, e2))
+	fmt.Println("The eldest person among customers", MaxAge(c1, c2))
+	fmt.Println("The eldest person among employees", MaxAge(e1, e2))
 	fmt.Println("The eldest person", MaxAge(c1, c2, e1, e2))
 }
