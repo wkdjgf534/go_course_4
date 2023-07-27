@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+const maxScore = 10
+
 func loop(msg string) {
 	for {
 		fmt.Println(msg)
@@ -13,6 +15,11 @@ func loop(msg string) {
 }
 
 func main() {
+	//messages := make(chan string)
+	//var wg sync.WaitGroup
+
+	//wg.Add()
 	go loop("ping")
 	loop("pong")
+	//wg.Wait()
 }
