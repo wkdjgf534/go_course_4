@@ -15,7 +15,9 @@ func loop(msg string) {
 }
 
 func main() {
-	//messages := make(chan string)
+	//ch := make(chan string)
+	//ch <- "begin"
+	//ch <- "stop"
 	//var wg sync.WaitGroup
 
 	//wg.Add()
