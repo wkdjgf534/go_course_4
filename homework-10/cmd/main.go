@@ -8,7 +8,7 @@ import (
 	"go-course-4/homework-10/pkg/player"
 )
 
-const MaxPoint = 10
+const maxPoint = 10
 
 func main() {
 	ch := make(chan string)
@@ -18,51 +18,48 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(2)
 
-	go func() {
-		play(p1, ch)
-		wg.Done()
-	}()
-	go func() {
-		play(p2, ch)
-		wg.Done()
-	}()
+	go play(p1, ch, &wg)
+	go play(p2, ch, &wg)
 
 	ch <- "begin"
 	wg.Wait()
+
 	fmt.Printf("%s, score: %d\n", p1.Name, p1.Point)
 	fmt.Printf("%s, score: %d\n", p2.Name, p2.Point)
 }
 
-func play(player *player.Player, table chan string) {
+func play(p *player.Player, table chan string, wg *sync.WaitGroup) {
+	defer wg.Done()
+
 	min := 1.0
 	max := 100.0
+	minChance := max * 0.2
 	for t := range table {
-		minChance := max * 0.2
 		randNum := min + rand.Float64()*(max-min)
 
 		switch t {
 		case "begin", "stop":
-			table <- Kick(t)
+			table <- kickBall(t)
 		case "ping", "pong":
 			fmt.Println(t)
 
-			if randNum >= max-minChance { //successfull strike
-				player.Point++
-				if player.Point >= MaxPoint {
-					fmt.Printf("player: %s won\n", player.Name)
+			if randNum >= max-minChance {
+				p.Point++
+				if p.Point >= maxPoint {
+					fmt.Printf("\nGame status: %s won\n", p.Name)
 					close(table)
 				} else {
 					table <- "stop"
 				}
 
 			} else {
-				table <- Kick(t)
+				table <- kickBall(t)
 			}
 		}
 	}
 }
 
-func Kick(status string) string {
+func kickBall(status string) string {
 	if status == "ping" {
 		return "pong"
 	}
