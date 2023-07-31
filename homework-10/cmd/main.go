@@ -10,16 +10,16 @@ import (
 
 const maxPoint = 10
 
+var wg sync.WaitGroup
+
 func main() {
 	ch := make(chan string)
 	p1 := player.New("Player 1")
 	p2 := player.New("Player 2")
 
-	var wg sync.WaitGroup
 	wg.Add(2)
-
-	go play(p1, ch, &wg)
-	go play(p2, ch, &wg)
+	go play(p1, ch)
+	go play(p2, ch)
 
 	ch <- "begin"
 	wg.Wait()
@@ -28,7 +28,7 @@ func main() {
 	fmt.Printf("%s, score: %d\n", p2.Name, p2.Point)
 }
 
-func play(p *player.Player, table chan string, wg *sync.WaitGroup) {
+func play(p *player.Player, table chan string) {
 	defer wg.Done()
 
 	min := 1.0
