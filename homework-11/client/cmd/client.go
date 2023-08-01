@@ -1,7 +1,16 @@
 package main
 
-const defaultProtocol = "tcp4"
-const defaultSocket = "localhost:8000"
+import (
+	"fmt"
+	"io"
+	"log"
+	"net"
+)
+
+const (
+	defaultProtocol = "tcp4"
+	defaultSocket   = "localhost:8000"
+)
 
 func main() {
 	conn, err := net.Dial(defaultProtocol, defaultSocket)
@@ -14,5 +23,5 @@ func main() {
 		log.Fatal(err)
 	}
 
-}
+	fmt.Println("Ответ от сервера:", string(msg))
 }
