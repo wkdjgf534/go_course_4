@@ -8,15 +8,15 @@ import (
 )
 
 const (
-	defaultProtocol = "tcp4"
-	defaultSocket   = "0.0.0.0:8000"
-	depth           = 1
+	proto = "tcp4"
+	addr  = "0.0.0.0:8000"
+	depth = 1
 )
 
 var urls = []string{"https://golang.org", "https://www.practical-go-lessons.com/"}
 
 func main() {
-	listener, err := net.Listen(defaultProtocol, defaultSocket)
+	listener, err := net.Listen(proto, addr)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -64,6 +64,7 @@ func main() {
 				}
 			}
 	*/
+
 }
 
 func handler(conn io.ReadWriteCloser) {

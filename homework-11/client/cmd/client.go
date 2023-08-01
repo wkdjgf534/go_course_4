@@ -8,12 +8,12 @@ import (
 )
 
 const (
-	defaultProtocol = "tcp4"
-	defaultSocket   = "localhost:8000"
+	proto = "tcp4"
+	addr  = "localhost:8000"
 )
 
 func main() {
-	conn, err := net.Dial(defaultProtocol, defaultSocket)
+	conn, err := net.Dial(proto, addr)
 	if err != nil {
 		log.Fatal(err)
 	}

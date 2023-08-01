@@ -6,8 +6,8 @@ import (
 	"go-course-4/homework-05/pkg/crawler"
 )
 
-// Service - служба инвертированного индексирования.
-type Service struct {
+// Index - служба инвертированного индексирования.
+type Index struct {
 	words map[string][]int
 }
 
@@ -15,14 +15,14 @@ type Service struct {
 func strToSlice(str string) []string { return strings.Fields(strings.ToLower(str)) }
 
 // New - конструктор службы инвертированного индексирования.
-func New() *Service {
-	i := Service{}
-	i.words = map[string][]int{}
-	return &i
+func New() *Index {
+	return &Index{
+		words: map[string][]int{},
+	}
 }
 
 // Add - добавление слов из заголовка и id документа в map
-func (i *Service) Add(docs *[]crawler.Document) error {
+func (i *Index) Add(docs *[]crawler.Document) error {
 	for _, d := range *docs {
 		arrStr := strToSlice(d.Title)
 		for _, s := range arrStr {
@@ -33,4 +33,4 @@ func (i *Service) Add(docs *[]crawler.Document) error {
 }
 
 // Ids - получение ID документов по ключевому слову
-func (i *Service) Ids(str string) []int { return i.words[str] }
+func (i *Index) Ids(str string) []int { return i.words[str] }
