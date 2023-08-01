@@ -9,7 +9,11 @@ import (
 	"go-course-4/homework-05/pkg/index"
 )
 
-const depth = 2
+const (
+	defaultProtocol = "tcp4"
+	defaultSocket   = "0.0.0.0:8000"
+	depth           = 2
+)
 
 var urls = []string{"https://golang.org", "https://www.practical-go-lessons.com/"}
 
