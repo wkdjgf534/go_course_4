@@ -1,10 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
-	"io"
 	"log"
 	"net"
+	"os"
 )
 
 const (
@@ -17,11 +18,30 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer conn.Close()
 
-	msg, err := io.ReadAll(conn)
-	if err != nil {
-		log.Fatal(err)
+	scanner := bufio.NewScanner(os.Stdin)
+	server := bufio.NewReader(conn)
+
+	for scanner.Scan() {
+		if scanner.Err() != nil {
+			log.Fatal(err)
+		}
+
+		b := append(scanner.Bytes(), '\r', '\n')
+		_, err = conn.Write(b)
+		if err != nil {
+			log.Fatal(err)
+		}
+		for {
+			b, _, err = server.ReadLine()
+			if err != nil {
+				log.Fatal(err)
+			}
+			if len(b) == 0 {
+				break
+			}
+			fmt.Println(string(b))
+		}
 	}
-
-	fmt.Println("Ответ от сервера:", string(msg))
 }
