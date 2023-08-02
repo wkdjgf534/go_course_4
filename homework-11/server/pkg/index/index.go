@@ -1,7 +1,6 @@
 package index
 
 import (
-	"fmt"
 	"strings"
 
 	"go-course-4/homework-11/server/pkg/crawler"
@@ -42,14 +41,14 @@ func (i *Index) addIndex() error {
 }
 
 // Search - поиск результата
-func (i *Index) Search(str string) {
-	idx := i.Words[str]
-	for _, ind := range idx {
+func (i *Index) Search(str string) []crawler.Document {
+	var docs []crawler.Document
+	for _, ind := range i.Words[str] {
 		min, max := i.Docs[0].ID, i.Docs[len(i.Docs)-1].ID
 		for min <= max {
 			mid := (min + max) / 2
 			if i.Docs[mid].ID == ind {
-				fmt.Println("found document id:", ind, "URL:", i.Docs[mid].URL)
+				docs = append(docs, i.Docs[mid])
 				break
 			} else if i.Docs[mid].ID < ind {
 				min = mid + 1
@@ -58,5 +57,5 @@ func (i *Index) Search(str string) {
 			}
 		}
 	}
-
+	return docs
 }

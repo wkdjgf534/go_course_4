@@ -16,7 +16,7 @@ const (
 )
 
 // Start - запуск сетевой службы
-func Start(ind *index.Index) {
+func Start(index *index.Index) {
 	listener, err := net.Listen(proto, addr)
 	if err != nil {
 		log.Fatal(err)
@@ -28,34 +28,31 @@ func Start(ind *index.Index) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		handler(conn, ind)
+		handler(conn, index)
 	}
 }
 
-func handler(conn net.Conn, ind *index.Index) {
+func handler(conn net.Conn, index *index.Index) {
 	defer conn.Close()
+	defer fmt.Println("Connection Closed")
+
 	conn.SetDeadline(time.Now().Add(time.Minute * 2))
-
 	response := bufio.NewReader(conn)
-	fmt.Println(response)
-
-	res, _, err := response.ReadLine()
-	if err != nil {
-		return
-	}
-
-	fmt.Printf("%T", ind)
-	result := ind.Search("go")
-
-	fmt.Println(result)
-	//for _, d := range result {
-	//	fmt.Println(d)
-	//}
-
-	if len(res) == 0 {
-		_, err := fmt.Fprintf(conn, "Nothing found\n")
+	for {
+		msg, _, err := response.ReadLine()
 		if err != nil {
 			return
 		}
+
+		if len(msg) == 0 {
+			fmt.Fprintf(conn, "Nothing found\n")
+		}
+
+		search := index.Search(string(msg))
+
+		for _, d := range search {
+			fmt.Fprintf(conn, "Article, %s - %s\n", d.Title, d.URL)
+		}
 	}
+
 }
