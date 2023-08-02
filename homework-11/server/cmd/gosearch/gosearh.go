@@ -3,12 +3,12 @@ package main
 
 import (
 	"fmt"
+	"io"
+
 	"go-course-4/homework-11/server/pkg/crawler"
 	"go-course-4/homework-11/server/pkg/crawler/spider"
 	"go-course-4/homework-11/server/pkg/index"
-	"io"
-	"log"
-	"net"
+	"go-course-4/homework-11/server/pkg/netsrv"
 )
 
 const (
@@ -20,20 +20,6 @@ const (
 var urls = []string{"https://golang.org", "https://www.practical-go-lessons.com/"}
 
 func main() {
-	listener, err := net.Listen(proto, addr)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer listener.Close()
-
-	for {
-		conn, err := listener.Accept()
-		if err != nil {
-			log.Fatal(err)
-		}
-		handler(conn)
-	}
-
 	var docs []crawler.Document
 	s := spider.New()
 	ind := index.New()
@@ -48,7 +34,6 @@ func main() {
 	}
 
 	ind.Add(&docs)
-
 	/*
 		idx := ind.Ids(strings.ToLower(clentQuery))
 
@@ -68,6 +53,7 @@ func main() {
 		}
 	*/
 
+	netsrv.Start()
 }
 
 func handler(conn io.ReadWriteCloser) {
