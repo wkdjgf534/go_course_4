@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"net"
 	"os"
 )
@@ -16,15 +15,15 @@ const (
 func main() {
 	conn, err := net.Dial(proto, addr)
 	if err != nil {
-		log.Print(err)
+		fmt.Println(err)
 		return
 	}
 	defer conn.Close()
-
 	go readFromSrv(conn)
 
 	r := bufio.NewReader(os.Stdin)
-	fmt.Println("Input your search search data:")
+	fmt.Println("Input your search data:")
+
 	for {
 		text, _ := r.ReadString('\n')
 		req := []byte(text)
