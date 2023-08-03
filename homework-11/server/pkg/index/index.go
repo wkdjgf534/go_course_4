@@ -24,8 +24,11 @@ func New() *Index {
 }
 
 // AddDocuments - добавление документов
-func (i *Index) AddDocuments(links []crawler.Document) {
-	i.Docs = append(i.Docs, links...)
+func (i *Index) AddDocuments(docs []crawler.Document) {
+	for index, l := range docs {
+		i.Docs = append(i.Docs, l)
+		i.Docs[index].ID = index
+	}
 	i.addIndex()
 }
 

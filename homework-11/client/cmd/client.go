@@ -24,7 +24,7 @@ func main() {
 	go readFromSrv(conn)
 
 	r := bufio.NewReader(os.Stdin)
-	fmt.Println("Input your search data")
+	fmt.Println("Input your search search data:")
 	for {
 		text, _ := r.ReadString('\n')
 		req := []byte(text)

@@ -46,16 +46,14 @@ func handler(conn net.Conn, index *index.Index) {
 			return
 		}
 
-		if len(msg) == 0 {
+		search := index.Search(string(msg))
+
+		if len(msg) == 0 || len(search) == 0 {
 			fmt.Fprintf(conn, "Nothing found, repeat again\n")
 		}
 
-		search := index.Search(string(msg))
-		fmt.Println(msg)
-		fmt.Println(search)
-
 		for _, d := range search {
-			fmt.Fprintf(conn, "Article, %s - %s\n", d.Title, d.URL)
+			fmt.Fprintf(conn, "Found article %s - %s\n", d.Title, d.URL)
 		}
 
 		conn.SetDeadline(time.Now().Add(time.Second * 30))

@@ -27,14 +27,11 @@ func (s *Service) Scan(url string, depth int) (data []crawler.Document, err erro
 
 	err = parse(url, url, depth, pages)
 
-	c := 0
 	for url, title := range pages {
 		item := crawler.Document{
-			ID:    c,
 			URL:   url,
 			Title: title,
 		}
-		c++
 		data = append(data, item)
 	}
 
