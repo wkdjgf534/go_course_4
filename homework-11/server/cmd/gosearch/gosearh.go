@@ -30,5 +30,5 @@ func main() {
 		ind.AddDocuments(links)
 	}
 
-	netsrv.Start(ind)
+	netsrv.Listen(ind)
 }

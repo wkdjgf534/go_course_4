@@ -16,32 +16,41 @@ const (
 func main() {
 	conn, err := net.Dial(proto, addr)
 	if err != nil {
-		log.Fatal(err)
+		log.Print(err)
+		return
 	}
 	defer conn.Close()
 
-	scanner := bufio.NewScanner(os.Stdin)
-	server := bufio.NewReader(conn)
+	go readFromSrv(conn)
 
-	for scanner.Scan() {
-		if scanner.Err() != nil {
-			log.Fatal(err)
-		}
+	r := bufio.NewReader(os.Stdin)
+	fmt.Println("Input your search data")
+	for {
+		text, _ := r.ReadString('\n')
+		req := []byte(text)
 
-		b := append(scanner.Bytes(), '\r', '\n')
-		_, err = conn.Write(b)
+		_, err := conn.Write(req)
 		if err != nil {
-			log.Fatal(err)
+			return
 		}
-		for {
-			b, _, err = server.ReadLine()
-			if err != nil {
-				log.Fatal(err)
-			}
-			if len(b) == 0 {
-				break
-			}
-			fmt.Println(string(b))
+
+		if text == "quit\n" || text == "exit\n" {
+			fmt.Println("exiting...")
+			return
 		}
+	}
+}
+
+func readFromSrv(conn net.Conn) {
+	defer conn.Close()
+
+	r := bufio.NewReader(conn)
+	for {
+		msg, _, err := r.ReadLine()
+		if err != nil {
+			return
+		}
+
+		fmt.Println(string(msg))
 	}
 }

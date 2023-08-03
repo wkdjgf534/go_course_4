@@ -15,8 +15,8 @@ const (
 	addr  = "0.0.0.0:8000"
 )
 
-// Start - запуск сетевой службы
-func Start(index *index.Index) {
+// Listen - запуск сетевой службы
+func Listen(index *index.Index) {
 	listener, err := net.Listen(proto, addr)
 	if err != nil {
 		log.Fatal(err)
@@ -37,11 +37,11 @@ func handler(conn net.Conn, index *index.Index) {
 	defer conn.Close()
 	defer fmt.Println("Connection Closed")
 
-	conn.SetDeadline(time.Now().Add(time.Second * 70))
-	response := bufio.NewReader(conn)
+	conn.SetDeadline(time.Now().Add(time.Second * 60))
+	r := bufio.NewReader(conn)
 
 	for {
-		msg, _, err := response.ReadLine()
+		msg, _, err := r.ReadLine()
 		if err != nil {
 			return
 		}
@@ -51,12 +51,14 @@ func handler(conn net.Conn, index *index.Index) {
 		}
 
 		search := index.Search(string(msg))
+		fmt.Println(msg)
+		fmt.Println(search)
 
 		for _, d := range search {
 			fmt.Fprintf(conn, "Article, %s - %s\n", d.Title, d.URL)
 		}
 
-		conn.SetDeadline(time.Now().Add(time.Second * 70))
+		conn.SetDeadline(time.Now().Add(time.Second * 30))
 	}
 
 }
