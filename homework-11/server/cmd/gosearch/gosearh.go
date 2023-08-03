@@ -12,7 +12,7 @@ import (
 const (
 	proto = "tcp4"
 	addr  = "0.0.0.0:8000"
-	depth = 1
+	depth = 2
 )
 
 var urls = []string{"https://golang.org", "https://www.practical-go-lessons.com/"}

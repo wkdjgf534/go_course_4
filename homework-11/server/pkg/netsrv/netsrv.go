@@ -26,9 +26,10 @@ func Start(index *index.Index) {
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
-			log.Fatal(err)
+			fmt.Printf("Error connection: %v\n", err)
+			continue
 		}
-		handler(conn, index)
+		go handler(conn, index)
 	}
 }
 
@@ -36,8 +37,9 @@ func handler(conn net.Conn, index *index.Index) {
 	defer conn.Close()
 	defer fmt.Println("Connection Closed")
 
-	conn.SetDeadline(time.Now().Add(time.Minute * 2))
+	conn.SetDeadline(time.Now().Add(time.Second * 70))
 	response := bufio.NewReader(conn)
+
 	for {
 		msg, _, err := response.ReadLine()
 		if err != nil {
@@ -45,7 +47,7 @@ func handler(conn net.Conn, index *index.Index) {
 		}
 
 		if len(msg) == 0 {
-			fmt.Fprintf(conn, "Nothing found\n")
+			fmt.Fprintf(conn, "Nothing found, repeat again\n")
 		}
 
 		search := index.Search(string(msg))
@@ -53,6 +55,8 @@ func handler(conn net.Conn, index *index.Index) {
 		for _, d := range search {
 			fmt.Fprintf(conn, "Article, %s - %s\n", d.Title, d.URL)
 		}
+
+		conn.SetDeadline(time.Now().Add(time.Second * 70))
 	}
 
 }
