@@ -3,7 +3,7 @@
 package spider
 
 import (
-	"go-course-4/homework-11/server/pkg/crawler"
+	"go-course-4/homework-12/server/pkg/crawler"
 	"net/http"
 	"strings"
 

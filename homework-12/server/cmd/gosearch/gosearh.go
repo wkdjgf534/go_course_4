@@ -4,10 +4,11 @@ package main
 import (
 	"fmt"
 
-	"go-course-4/homework-11/server/pkg/crawler"
-	"go-course-4/homework-11/server/pkg/crawler/spider"
-	"go-course-4/homework-11/server/pkg/index"
-	"go-course-4/homework-11/server/pkg/netsrv"
+	"go-course-4/homework-12/server/pkg/crawler"
+	"go-course-4/homework-12/server/pkg/crawler/spider"
+	"go-course-4/homework-12/server/pkg/index"
+	"go-course-4/homework-12/server/pkg/netsrv"
+	"go-course-4/homework-12/server/pkg/webapp"
 )
 
 const (
@@ -32,5 +33,6 @@ func main() {
 		docs = append(docs, links...)
 	}
 	ind.AddDocuments(docs)
+	go webapp.Handler(ind)
 	netsrv.Listen(ind)
 }
