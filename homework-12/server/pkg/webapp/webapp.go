@@ -2,42 +2,34 @@ package webapp
 
 import (
 	"fmt"
-	"go-course-4/homework-12/server/pkg/index"
 	"net/http"
+
+	"github.com/gorilla/mux"
+
+	"go-course-4/homework-12/server/pkg/index"
 )
 
-const addr = "0.0.0.0:8080"
+const addr = ":8080"
 
 // Handler -
 func Handler(index *index.Index) {
-	mux := http.NewServeMux()
-
-	mux.HandleFunc("/docs", handlerDocs)
-	mux.HandleFunc("/index", handlerIndex)
-
-	err := http.ListenAndServe(addr, mux)
+	r := mux.NewRouter()
+	endpoints(r)
+	err := http.ListenAndServe(addr, r)
 	if err != nil {
 		fmt.Println("Error", err)
 	}
 }
 
-func handlerDocs(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/docs" {
-		handler404(w)
-		return
-	}
+func endpoints(r *mux.Router) {
+	r.HandleFunc("/docs", docsHandler).Methods(http.MethodGet)
+	r.HandleFunc("/index", indexHandler).Methods(http.MethodGet)
+}
+
+func docsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Docs"))
 }
 
-func handlerIndex(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/index" {
-		handler404(w)
-		return
-	}
+func indexHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Index"))
-}
-
-func handler404(w http.ResponseWriter) {
-	w.WriteHeader(http.StatusNotFound)
-	w.Write([]byte("404 Page Not Found"))
 }
