@@ -32,7 +32,7 @@ func main() {
 		}
 		docs = append(docs, links...)
 	}
-	ind.AddDocuments(docs)
+	//ind.AddDocuments(docs)
 	go webapp.Listen(ind)
 	netsrv.Listen(ind)
 }
