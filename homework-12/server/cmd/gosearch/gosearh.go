@@ -33,6 +33,6 @@ func main() {
 		docs = append(docs, links...)
 	}
 	ind.AddDocuments(docs)
-	go webapp.Handler(ind)
+	go webapp.Listen(ind)
 	netsrv.Listen(ind)
 }
