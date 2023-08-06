@@ -3,6 +3,7 @@ package main
 
 import (
 	"fmt"
+	"net"
 
 	"go-course-4/homework-11/pkg/crawler"
 	"go-course-4/homework-11/pkg/crawler/spider"
@@ -32,5 +33,18 @@ func main() {
 		docs = append(docs, links...)
 	}
 	ind.AddDocuments(docs)
-	netsrv.Listen(ind)
+
+	listener, err := net.Listen(proto, addr)
+	if err != nil {
+		fmt.Printf("Something went wrong with server on %s: %s\n", addr, err)
+		return
+	}
+	defer listener.Close()
+
+	err = netsrv.Listen(listener, ind)
+	if err != nil {
+		fmt.Printf("Yet another error from the server: %s", err)
+		return
+	}
+
 }

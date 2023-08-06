@@ -19,7 +19,6 @@ func main() {
 		return
 	}
 	defer conn.Close()
-	readFromSrv(conn)
 
 	r := bufio.NewReader(os.Stdin)
 	fmt.Println("Input your search data:")
@@ -41,19 +40,15 @@ func main() {
 			fmt.Println("exiting...")
 			return
 		}
-	}
-}
 
-func readFromSrv(conn net.Conn) {
-	defer conn.Close()
+		r := bufio.NewReader(conn)
+		for {
+			msg, _, err := r.ReadLine()
+			if err != nil {
+				return
+			}
 
-	r := bufio.NewReader(conn)
-	for {
-		msg, _, err := r.ReadLine()
-		if err != nil {
-			return
+			fmt.Println(string(msg))
 		}
-
-		fmt.Println(string(msg))
 	}
 }
