@@ -3,26 +3,14 @@ package netsrv
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"net"
 	"time"
 
-	"go-course-4/homework-12/server/pkg/index"
-)
-
-const (
-	proto = "tcp4"
-	addr  = "0.0.0.0:8000"
+	"go-course-4/homework-12/pkg/index"
 )
 
 // Listen - запуск сетевой службы
-func Listen(index *index.Index) {
-	listener, err := net.Listen(proto, addr)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer listener.Close()
-
+func Listen(listener net.Listener, index *index.Index) error {
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
@@ -33,7 +21,7 @@ func Listen(index *index.Index) {
 	}
 }
 
-func handler(conn net.Conn, index *index.Index) {
+func handler(conn net.Conn, index *index.Index) error {
 	defer conn.Close()
 	defer fmt.Println("Connection Closed")
 
@@ -43,7 +31,7 @@ func handler(conn net.Conn, index *index.Index) {
 	for {
 		msg, _, err := r.ReadLine()
 		if err != nil {
-			return
+			return err
 		}
 
 		search := index.Search(string(msg))

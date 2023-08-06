@@ -3,12 +3,12 @@ package main
 
 import (
 	"fmt"
+	"net"
 
-	"go-course-4/homework-12/server/pkg/crawler"
-	"go-course-4/homework-12/server/pkg/crawler/spider"
-	"go-course-4/homework-12/server/pkg/index"
-	"go-course-4/homework-12/server/pkg/netsrv"
-	"go-course-4/homework-12/server/pkg/webapp"
+	"go-course-4/homework-12/pkg/crawler"
+	"go-course-4/homework-12/pkg/crawler/spider"
+	"go-course-4/homework-12/pkg/index"
+	"go-course-4/homework-12/pkg/netsrv"
 )
 
 const (
@@ -33,6 +33,18 @@ func main() {
 		docs = append(docs, links...)
 	}
 	ind.AddDocuments(docs)
-	go webapp.Listen(ind)
-	netsrv.Listen(ind)
+
+	listener, err := net.Listen(proto, addr)
+	if err != nil {
+		fmt.Printf("Something went wrong with server on %s: %s\n", addr, err)
+		return
+	}
+	defer listener.Close()
+
+	err = netsrv.Listen(listener, ind)
+	if err != nil {
+		fmt.Printf("Yet another error from the server: %s", err)
+		return
+	}
+
 }
