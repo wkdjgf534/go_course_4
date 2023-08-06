@@ -19,16 +19,20 @@ func main() {
 		return
 	}
 	defer conn.Close()
-	go readFromSrv(conn)
+	readFromSrv(conn)
 
 	r := bufio.NewReader(os.Stdin)
 	fmt.Println("Input your search data:")
 
 	for {
-		text, _ := r.ReadString('\n')
+		text, err := r.ReadString('\n')
+		if err != nil {
+			return
+		}
+
 		req := []byte(text)
 
-		_, err := conn.Write(req)
+		_, err = conn.Write(req)
 		if err != nil {
 			return
 		}

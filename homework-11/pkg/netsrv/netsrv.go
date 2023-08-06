@@ -7,7 +7,7 @@ import (
 	"net"
 	"time"
 
-	"go-course-4/homework-11/server/pkg/index"
+	"go-course-4/homework-11/pkg/index"
 )
 
 const (

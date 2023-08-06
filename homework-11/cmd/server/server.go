@@ -4,10 +4,10 @@ package main
 import (
 	"fmt"
 
-	"go-course-4/homework-11/server/pkg/crawler"
-	"go-course-4/homework-11/server/pkg/crawler/spider"
-	"go-course-4/homework-11/server/pkg/index"
-	"go-course-4/homework-11/server/pkg/netsrv"
+	"go-course-4/homework-11/pkg/crawler"
+	"go-course-4/homework-11/pkg/crawler/spider"
+	"go-course-4/homework-11/pkg/index"
+	"go-course-4/homework-11/pkg/netsrv"
 )
 
 const (
