@@ -9,8 +9,8 @@ import (
 	"go-course-4/homework-12/pkg/index"
 )
 
-// Listen - запуск сетевой службы
-func Listen(listener net.Listener, index *index.Index) error {
+// Start - запуск сетевой службы
+func Start(listener net.Listener, index *index.Index) error {
 	for {
 		conn, err := listener.Accept()
 		if err != nil {

@@ -2,27 +2,29 @@ package webapp
 
 import (
 	"fmt"
-	"go-course-4/homework-12/server/pkg/index"
 	"net/http"
 
 	"github.com/gorilla/mux"
 	"golang.org/x/exp/slices"
+
+	"go-course-4/homework-12/pkg/index"
 )
 
 const addr = ":8080"
 
 var data *index.Index
 
-// Listen -
-func Listen(i *index.Index) {
+// Start - запуск сетевой службы
+func Start(i *index.Index) error {
 	data = i
 
 	r := mux.NewRouter()
 	endpoints(r)
 	err := http.ListenAndServe(addr, r)
 	if err != nil {
-		fmt.Println("Error", err)
+		return err
 	}
+	return nil
 }
 
 func endpoints(r *mux.Router) {

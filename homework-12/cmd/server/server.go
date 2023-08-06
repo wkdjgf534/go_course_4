@@ -4,11 +4,13 @@ package main
 import (
 	"fmt"
 	"net"
+	"sync"
 
 	"go-course-4/homework-12/pkg/crawler"
 	"go-course-4/homework-12/pkg/crawler/spider"
 	"go-course-4/homework-12/pkg/index"
 	"go-course-4/homework-12/pkg/netsrv"
+	"go-course-4/homework-12/pkg/webapp"
 )
 
 const (
@@ -41,10 +43,25 @@ func main() {
 	}
 	defer listener.Close()
 
-	err = netsrv.Listen(listener, ind)
-	if err != nil {
-		fmt.Printf("Yet another error from the server: %s", err)
-		return
-	}
+	wg := &sync.WaitGroup{}
+	wg.Add(1)
+	go func() {
+		err = netsrv.Start(listener, ind)
+		if err != nil {
+			fmt.Printf("Error from the server1: %s", err)
+			return
+		}
+		wg.Done()
+	}()
+	wg.Add(1)
+	go func() {
+		err = webapp.Start(ind)
+		if err != nil {
+			fmt.Printf("Error from server2: %s", err)
+			return
+		}
+		wg.Done()
+	}()
+	wg.Wait()
 
 }
