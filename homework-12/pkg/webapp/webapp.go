@@ -17,7 +17,6 @@ var data *index.Index
 // Start - запуск сетевой службы
 func Start(i *index.Index) error {
 	data = i
-
 	r := mux.NewRouter()
 	endpoints(r)
 	err := http.ListenAndServe(addr, r)
