@@ -47,9 +47,9 @@ func Test_docsHandler(t *testing.T) {
 }
 
 func Test_indexHandler(t *testing.T) {
-	want := "<html><body><div><p>document0 - [0]</p></div></body></html>"
+	want := "<html><body><div><p>0 - Document0</p></div></body></html>"
 
-	req := httptest.NewRequest(http.MethodGet, "/index", nil)
+	req := httptest.NewRequest(http.MethodGet, "/docs", nil)
 
 	rr := httptest.NewRecorder()
 	testMux.ServeHTTP(rr, req)
