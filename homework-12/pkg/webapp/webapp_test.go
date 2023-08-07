@@ -1,14 +1,15 @@
 package webapp
 
 import (
-	"go-course-4/homework-12/pkg/crawler"
-	"go-course-4/homework-12/pkg/index"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/gorilla/mux"
+
+	"go-course-4/homework-12/pkg/crawler"
+	"go-course-4/homework-12/pkg/index"
 )
 
 var testMux *mux.Router
