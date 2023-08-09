@@ -16,20 +16,20 @@ var testMux *mux.Router
 
 func TestMain(m *testing.M) {
 	docs := []crawler.Document{{ID: 0, Title: "Document0"}}
-	index := *index.New()
-	index.AddDocuments(docs)
-	data = &index
-
 	testMux = mux.NewRouter()
-	endpoints(testMux)
+	index := index.New()
+	index.AddDocuments(docs)
+
+	wa := New(index)
+	testMux.HandleFunc("/docs", wa.DocsHandler).Methods(http.MethodGet)
+	testMux.HandleFunc("/index", wa.IndexHandler).Methods(http.MethodGet)
 	m.Run()
 }
 
-func Test_docsHandler(t *testing.T) {
+func TestDocsHandler(t *testing.T) {
 	want := "<html><body><div><p>0 - Document0</p></div></body></html>"
 
 	req := httptest.NewRequest(http.MethodGet, "/docs", nil)
-
 	rr := httptest.NewRecorder()
 	testMux.ServeHTTP(rr, req)
 	if rr.Code != http.StatusOK {
@@ -47,7 +47,7 @@ func Test_docsHandler(t *testing.T) {
 	}
 }
 
-func Test_indexHandler(t *testing.T) {
+func TestIndexHandler(t *testing.T) {
 	want := "<html><body><div><p>0 - Document0</p></div></body></html>"
 
 	req := httptest.NewRequest(http.MethodGet, "/docs", nil)

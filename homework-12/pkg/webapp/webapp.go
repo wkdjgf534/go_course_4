@@ -4,53 +4,41 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gorilla/mux"
-
 	"go-course-4/homework-12/pkg/index"
 )
 
-const addr = ":8080"
-
-var data *index.Index
-
-// Start - запуск сетевой службы
-func Start(i *index.Index) error {
-	data = i
-	r := mux.NewRouter()
-	endpoints(r)
-	err := http.ListenAndServe(addr, r)
-	if err != nil {
-		return err
-	}
-	return nil
+type WebApp struct {
+	index *index.Index
 }
 
-func endpoints(r *mux.Router) {
-	r.HandleFunc("/docs", docsHandler).Methods(http.MethodGet)
-	r.HandleFunc("/index", indexHandler).Methods(http.MethodGet)
+// New - конструктор для цуи сервера
+func New(ind *index.Index) WebApp {
+	return WebApp{index: ind}
 }
 
-func docsHandler(w http.ResponseWriter, r *http.Request) {
+// DocsHandler - функция возвращает список документов
+func (webapp *WebApp) DocsHandler(w http.ResponseWriter, r *http.Request) {
 	var pTags string
 	pTags = "Docs do not exist"
 
-	if len(data.Docs) != 0 {
+	if len(webapp.index.Docs) != 0 {
 		pTags = ""
 
-		for _, doc := range data.Docs {
+		for _, doc := range webapp.index.Docs {
 			pTags += fmt.Sprintf("<p>%v - %v</p>", doc.ID, doc.Title)
 		}
 	}
 	fmt.Fprintf(w, "<html><body><div>%v</div></body></html>", pTags)
 }
 
-func indexHandler(w http.ResponseWriter, r *http.Request) {
+// IndexHandler - функция возвращает список тегов и массив id документов
+func (webapp *WebApp) IndexHandler(w http.ResponseWriter, r *http.Request) {
 	var pTags string
 	pTags = "Indexes do not exist"
 
-	if len(data.Docs) != 0 {
+	if len(webapp.index.Docs) != 0 {
 		pTags = ""
-		for key, value := range data.Words {
+		for key, value := range webapp.index.Words {
 			pTags += fmt.Sprintf("<p>%v - %v</p>", key, value)
 		}
 	}
