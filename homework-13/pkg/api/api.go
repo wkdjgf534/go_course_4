@@ -30,23 +30,22 @@ func New(index *index.Index) *API {
 func (api *API) endpoints() {
 	// Middleware Header w.Header().Set("Content-Type", "application/json")
 
-	api.router.HandleFunc("/api/v1/docs", api.docs).Methods(http.MethodGet)
-	api.router.HandleFunc("/api/v1/docs/{id}", api.showDoc).Methods(http.MethodGet)
+	api.router.HandleFunc("/api/v1/docs/{word}", api.search).Methods(http.MethodGet)
 	api.router.HandleFunc("/api/v1/docs", api.createDoc).Methods(http.MethodPost)
 	api.router.HandleFunc("/api/v1/docs/{id}", api.updateDoc).Methods(http.MethodPut)
 	api.router.HandleFunc("/api/v1/docs/{id}", api.destroyDoc).Methods(http.MethodDelete)
 }
 
-func (api *API) docs(w http.ResponseWriter, r *http.Request) {
-	err := json.NewEncoder(w).Encode(index.docs)
+func (api *API) search(w http.ResponseWriter, r *http.Request) {
+	err := json.NewEncoder(w).Encode(api.index.Docs)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-}
 
-func (api *API) showDocs(w http.ResponseWriter, r *http.Request) {
-	//id, err := strconv.Atoi(mux.Vars(r)["id"])
+	data := api.index.Search(mux.Vars(r)["word"])
+	json.NewEncoder(w).Encode(data)
+
 }
 
 func (api *API) createDoc(w http.ResponseWriter, r *http.Request) {
