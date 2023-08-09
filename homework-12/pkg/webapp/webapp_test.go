@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/gorilla/mux"
+	"github.com/stretchr/testify/assert"
 
 	"go-course-4/homework-12/pkg/crawler"
 	"go-course-4/homework-12/pkg/index"
@@ -32,9 +33,7 @@ func TestDocsHandler(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/docs", nil)
 	rr := httptest.NewRecorder()
 	testMux.ServeHTTP(rr, req)
-	if rr.Code != http.StatusOK {
-		t.Errorf("got HTTP code: %d, want HTTP code: %d", rr.Code, http.StatusOK)
-	}
+	assert.Equal(t, http.StatusOK, rr.Code, "HTTP status is 200")
 
 	data, err := io.ReadAll(rr.Body)
 	if err != nil {
@@ -42,9 +41,7 @@ func TestDocsHandler(t *testing.T) {
 	}
 	got := string(data)
 
-	if got != want {
-		t.Errorf("got HTML code %v, want HTML code %v", got, want)
-	}
+	assert.Equal(t, want, got, "got expected HTML template")
 }
 
 func TestIndexHandler(t *testing.T) {
@@ -54,9 +51,8 @@ func TestIndexHandler(t *testing.T) {
 
 	rr := httptest.NewRecorder()
 	testMux.ServeHTTP(rr, req)
-	if rr.Code != http.StatusOK {
-		t.Errorf("got HTTP code: %d, want HTTP code: %d", rr.Code, http.StatusOK)
-	}
+
+	assert.Equal(t, http.StatusOK, rr.Code, "HTTP status is OK")
 
 	data, err := io.ReadAll(rr.Body)
 	if err != nil {
@@ -64,7 +60,5 @@ func TestIndexHandler(t *testing.T) {
 	}
 	got := string(data)
 
-	if got != want {
-		t.Errorf("got HTML code %v, want HTML code %v", got, want)
-	}
+	assert.Equal(t, want, got, "got expected HTML template")
 }
