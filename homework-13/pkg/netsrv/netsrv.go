@@ -6,7 +6,7 @@ import (
 	"net"
 	"time"
 
-	"go-course-4/homework-12/pkg/index"
+	"go-course-4/homework-13/pkg/index"
 )
 
 // Start - запуск сетевой службы

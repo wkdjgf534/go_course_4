@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"net/http"
 
-	"go-course-4/homework-12/pkg/index"
+	"go-course-4/homework-13/pkg/api"
+	"go-course-4/homework-13/pkg/index"
 )
 
 type WebApp struct {
 	index *index.Index
+	api   *api.API
 }
 
 // New - конструктор для цуи сервера

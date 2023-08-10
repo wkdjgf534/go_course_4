@@ -9,11 +9,11 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"go-course-4/homework-12/pkg/crawler"
-	"go-course-4/homework-12/pkg/crawler/spider"
-	"go-course-4/homework-12/pkg/index"
-	"go-course-4/homework-12/pkg/netsrv"
-	"go-course-4/homework-12/pkg/webapp"
+	"go-course-4/homework-13/pkg/crawler"
+	"go-course-4/homework-13/pkg/crawler/spider"
+	"go-course-4/homework-13/pkg/index"
+	"go-course-4/homework-13/pkg/netsrv"
+	"go-course-4/homework-13/pkg/webapp"
 )
 
 const (

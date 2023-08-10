@@ -9,8 +9,8 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
 
-	"go-course-4/homework-12/pkg/crawler"
-	"go-course-4/homework-12/pkg/index"
+	"go-course-4/homework-13/pkg/crawler"
+	"go-course-4/homework-13/pkg/index"
 )
 
 var testMux *mux.Router
