@@ -7,34 +7,33 @@ import (
 	"testing"
 
 	"github.com/gorilla/mux"
+	"github.com/stretchr/testify/assert"
 
-	"go-course-4/homework-13/pkg/crawler"
-	"go-course-4/homework-13/pkg/index"
+	"go-course-4/homework-12/pkg/crawler"
+	"go-course-4/homework-12/pkg/index"
 )
 
 var testMux *mux.Router
 
 func TestMain(m *testing.M) {
 	docs := []crawler.Document{{ID: 0, Title: "Document0"}}
-	index := *index.New()
-	index.AddDocuments(docs)
-	data = &index
-
 	testMux = mux.NewRouter()
-	endpoints(testMux)
+	index := index.New()
+	index.AddDocuments(docs)
+
+	wa := New(index)
+	testMux.HandleFunc("/docs", wa.DocsHandler).Methods(http.MethodGet)
+	testMux.HandleFunc("/index", wa.IndexHandler).Methods(http.MethodGet)
 	m.Run()
 }
 
-func Test_docsHandler(t *testing.T) {
+func TestDocsHandler(t *testing.T) {
 	want := "<html><body><div><p>0 - Document0</p></div></body></html>"
 
 	req := httptest.NewRequest(http.MethodGet, "/docs", nil)
-
 	rr := httptest.NewRecorder()
 	testMux.ServeHTTP(rr, req)
-	if rr.Code != http.StatusOK {
-		t.Errorf("got HTTP code: %d, want HTTP code: %d", rr.Code, http.StatusOK)
-	}
+	assert.Equal(t, http.StatusOK, rr.Code, "HTTP status is 200")
 
 	data, err := io.ReadAll(rr.Body)
 	if err != nil {
@@ -42,21 +41,18 @@ func Test_docsHandler(t *testing.T) {
 	}
 	got := string(data)
 
-	if got != want {
-		t.Errorf("got HTML code %v, want HTML code %v", got, want)
-	}
+	assert.Equal(t, want, got, "got expected HTML template")
 }
 
-func Test_indexHandler(t *testing.T) {
+func TestIndexHandler(t *testing.T) {
 	want := "<html><body><div><p>0 - Document0</p></div></body></html>"
 
 	req := httptest.NewRequest(http.MethodGet, "/docs", nil)
 
 	rr := httptest.NewRecorder()
 	testMux.ServeHTTP(rr, req)
-	if rr.Code != http.StatusOK {
-		t.Errorf("got HTTP code: %d, want HTTP code: %d", rr.Code, http.StatusOK)
-	}
+
+	assert.Equal(t, http.StatusOK, rr.Code, "HTTP status is OK")
 
 	data, err := io.ReadAll(rr.Body)
 	if err != nil {
@@ -64,7 +60,5 @@ func Test_indexHandler(t *testing.T) {
 	}
 	got := string(data)
 
-	if got != want {
-		t.Errorf("got HTML code %v, want HTML code %v", got, want)
-	}
+	assert.Equal(t, want, got, "got expected HTML template")
 }

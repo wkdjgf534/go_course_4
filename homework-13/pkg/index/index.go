@@ -3,7 +3,7 @@ package index
 import (
 	"strings"
 
-	"go-course-4/homework-13/pkg/crawler"
+	"go-course-4/homework-12/pkg/crawler"
 )
 
 // Index - служба инвертированного индексирования.
