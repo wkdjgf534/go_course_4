@@ -13,6 +13,7 @@ import (
 	"go-course-4/homework-13/pkg/crawler"
 	"go-course-4/homework-13/pkg/crawler/spider"
 	"go-course-4/homework-13/pkg/index"
+	"go-course-4/homework-13/pkg/middleware"
 	"go-course-4/homework-13/pkg/netsrv"
 	"go-course-4/homework-13/pkg/webapp"
 )
@@ -60,10 +61,10 @@ func main() {
 	}()
 	go func() {
 		mux := mux.NewRouter()
-		api.New(ind, mux)
+		api := api.New(ind)
 		wa := webapp.New(ind)
-		mux.HandleFunc("/docs", wa.DocsHandler).Methods(http.MethodGet)
-		mux.HandleFunc("/index", wa.IndexHandler).Methods(http.MethodGet)
+		apiEndpoints(api, mux)
+		webappEndpoints(wa, mux)
 		err := http.ListenAndServe(addr2, mux)
 		if err != nil {
 			fmt.Printf("Error from server2: %s", err)
@@ -73,4 +74,17 @@ func main() {
 	}()
 	wg.Wait()
 
+}
+
+func webappEndpoints(wa *webapp.WebApp, mux *mux.Router) {
+	mux.HandleFunc("/docs", wa.DocsHandler).Methods(http.MethodGet)
+	mux.HandleFunc("/index", wa.IndexHandler).Methods(http.MethodGet)
+}
+
+func apiEndpoints(api *api.API, mux *mux.Router) {
+	mux.Use(middleware.HeadersMiddleware)
+	mux.HandleFunc("/api/v1/docs/{word}", api.SearchDoc).Methods(http.MethodGet)
+	mux.HandleFunc("/api/v1/docs", api.CreateDoc).Methods(http.MethodPost)
+	mux.HandleFunc("/api/v1/docs/{id}", api.UpdateDoc).Methods(http.MethodPut)
+	mux.HandleFunc("/api/v1/docs/{id}", api.DestroyDoc).Methods(http.MethodDelete)
 }
