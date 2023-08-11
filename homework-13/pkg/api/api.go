@@ -10,42 +10,38 @@ import (
 	"go-course-4/homework-13/pkg/index"
 )
 
-// API -
+// API - служба API.
 type API struct {
 	router *mux.Router
 	index  *index.Index
 }
 
-// New -
-func New(index *index.Index) *API {
+// New - конструктор для API.
+func New(index *index.Index, mux *mux.Router) *API {
 	api := API{
-		router: mux.NewRouter(),
+		router: mux,
 		index:  index,
 	}
 
 	api.endpoints()
+	api.router.Use(headersMiddleware)
 	return &api
 }
 
 func (api *API) endpoints() {
-	// Middleware Header w.Header().Set("Content-Type", "application/json")
-
-	api.router.HandleFunc("/api/v1/docs/{word}", api.search).Methods(http.MethodGet)
+	api.router.HandleFunc("/api/v1/docs/{word}", api.searchDoc).Methods(http.MethodGet)
 	api.router.HandleFunc("/api/v1/docs", api.createDoc).Methods(http.MethodPost)
 	api.router.HandleFunc("/api/v1/docs/{id}", api.updateDoc).Methods(http.MethodPut)
 	api.router.HandleFunc("/api/v1/docs/{id}", api.destroyDoc).Methods(http.MethodDelete)
 }
 
-func (api *API) search(w http.ResponseWriter, r *http.Request) {
-	err := json.NewEncoder(w).Encode(api.index.Docs)
+func (api *API) searchDoc(w http.ResponseWriter, r *http.Request) {
+	data := api.index.Search(mux.Vars(r)["word"])
+	err := json.NewEncoder(w).Encode(data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	data := api.index.Search(mux.Vars(r)["word"])
-	json.NewEncoder(w).Encode(data)
-
 }
 
 func (api *API) createDoc(w http.ResponseWriter, r *http.Request) {
@@ -56,7 +52,9 @@ func (api *API) createDoc(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//api.index.AddDocuments(doc)
+	var docs []crawler.Document
+	docs = append(docs, doc)
+	api.index.AddDocuments(docs)
 }
 
 func (api *API) updateDoc(w http.ResponseWriter, r *http.Request) {

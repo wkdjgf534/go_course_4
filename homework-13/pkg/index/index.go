@@ -4,6 +4,8 @@ import (
 	"strings"
 
 	"go-course-4/homework-13/pkg/crawler"
+
+	"golang.org/x/exp/maps"
 )
 
 // Index - служба инвертированного индексирования.
@@ -34,6 +36,10 @@ func (i *Index) AddDocuments(docs []crawler.Document) {
 
 // addIndex - добавление слов из заголовка и id документа в map
 func (i *Index) addIndex() error {
+	if len(i.Words) > 0 {
+		maps.Clear(i.Words)
+	}
+
 	for _, d := range i.Docs {
 		arrStr := strToSlice(d.Title)
 		for _, s := range arrStr {

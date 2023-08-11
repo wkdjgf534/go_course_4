@@ -9,6 +9,7 @@ import (
 
 	"github.com/gorilla/mux"
 
+	"go-course-4/homework-13/pkg/api"
 	"go-course-4/homework-13/pkg/crawler"
 	"go-course-4/homework-13/pkg/crawler/spider"
 	"go-course-4/homework-13/pkg/index"
@@ -59,6 +60,7 @@ func main() {
 	}()
 	go func() {
 		mux := mux.NewRouter()
+		api.New(ind, mux)
 		wa := webapp.New(ind)
 		mux.HandleFunc("/docs", wa.DocsHandler).Methods(http.MethodGet)
 		mux.HandleFunc("/index", wa.IndexHandler).Methods(http.MethodGet)

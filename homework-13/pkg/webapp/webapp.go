@@ -4,18 +4,16 @@ import (
 	"fmt"
 	"net/http"
 
-	"go-course-4/homework-13/pkg/api"
 	"go-course-4/homework-13/pkg/index"
 )
 
 type WebApp struct {
-	index *index.Index
-	api   *api.API
+	Index *index.Index
 }
 
 // New - конструктор для цуи сервера
 func New(ind *index.Index) WebApp {
-	return WebApp{index: ind}
+	return WebApp{Index: ind}
 }
 
 // DocsHandler - функция возвращает список документов
@@ -23,10 +21,10 @@ func (webapp *WebApp) DocsHandler(w http.ResponseWriter, r *http.Request) {
 	var pTags string
 	pTags = "Docs do not exist"
 
-	if len(webapp.index.Docs) != 0 {
+	if len(webapp.Index.Docs) != 0 {
 		pTags = ""
 
-		for _, doc := range webapp.index.Docs {
+		for _, doc := range webapp.Index.Docs {
 			pTags += fmt.Sprintf("<p>%v - %v</p>", doc.ID, doc.Title)
 		}
 	}
@@ -38,9 +36,9 @@ func (webapp *WebApp) IndexHandler(w http.ResponseWriter, r *http.Request) {
 	var pTags string
 	pTags = "Indexes do not exist"
 
-	if len(webapp.index.Docs) != 0 {
+	if len(webapp.Index.Docs) != 0 {
 		pTags = ""
-		for key, value := range webapp.index.Words {
+		for key, value := range webapp.Index.Words {
 			pTags += fmt.Sprintf("<p>%v - %v</p>", key, value)
 		}
 	}
