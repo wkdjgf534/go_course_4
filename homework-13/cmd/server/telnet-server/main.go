@@ -13,7 +13,7 @@ import (
 
 const (
 	proto = "tcp4"
-	addr1 = ":8000"
+	addr  = ":8000"
 	depth = 1
 )
 
@@ -34,16 +34,16 @@ func main() {
 	}
 	ind.AddDocuments(docs)
 
-	listener, err := net.Listen(proto, addr1)
+	listener, err := net.Listen(proto, addr)
 	if err != nil {
-		fmt.Printf("Something went wrong with server on %s: %s\n", addr1, err)
+		fmt.Printf("Something went wrong with server on %s: %s\n", addr, err)
 		return
 	}
 	defer listener.Close()
 
 	err = netsrv.Start(listener, ind)
 	if err != nil {
-		fmt.Printf("Error from the server1: %s", err)
+		fmt.Printf("Error from the telnet server: %s", err)
 		return
 	}
 }

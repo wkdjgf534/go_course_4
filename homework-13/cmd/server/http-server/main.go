@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	addr2 = ":8080"
+	addr  = ":8080"
 	depth = 1
 )
 
@@ -42,9 +42,9 @@ func main() {
 	wa := webapp.New(ind)
 	apiEndpoints(api, mux)
 	webappEndpoints(wa, mux)
-	err := http.ListenAndServe(addr2, mux)
+	err := http.ListenAndServe(addr, mux)
 	if err != nil {
-		fmt.Printf("Error from server2: %s", err)
+		fmt.Printf("Error from http server: %s", err)
 		return
 	}
 
