@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 
@@ -46,10 +47,42 @@ func (api *API) CreateDoc(w http.ResponseWriter, r *http.Request) {
 
 // UpdateDoc - функция обновления документам по id документа
 func (api *API) UpdateDoc(w http.ResponseWriter, r *http.Request) {
-	//id, err := strconv.Atoi(mux.Vars(r)["id"])
+	var doc crawler.Document
+	err := json.NewDecoder(r.Body).Decode(&doc)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	id, err := strconv.Atoi(mux.Vars(r)["id"])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	status := api.index.ExistsDoc(id)
+	if status {
+		api.index.Docs[id].URL = doc.URL
+		api.index.Docs[id].Title = doc.Title
+		api.index.Docs[id].Body = doc.Body
+	} else {
+		http.Error(w, "Document was not found", http.StatusNotFound)
+	}
 }
 
 // DestroyDoc - функция удаления документа по id
 func (api *API) DestroyDoc(w http.ResponseWriter, r *http.Request) {
-	//id, err := strconv.Atoi(mux.Vars(r)["id"])
+	id, err := strconv.Atoi(mux.Vars(r)["id"])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	status := api.index.ExistsDoc(id)
+	if status {
+		api.index.Docs = append(api.index.Docs[:id], api.index.Docs[id+1:]...)
+	} else {
+		http.Error(w, "Document was not found", http.StatusNotFound)
+	}
+
 }

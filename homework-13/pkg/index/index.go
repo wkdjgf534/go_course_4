@@ -49,7 +49,7 @@ func (i *Index) addIndex() error {
 	return nil
 }
 
-// Search - поиск результата
+// Search - поиск документов по ключевому слову
 func (i *Index) Search(str string) []crawler.Document {
 	var docs []crawler.Document
 	for _, ind := range i.Words[str] {
@@ -67,4 +67,21 @@ func (i *Index) Search(str string) []crawler.Document {
 		}
 	}
 	return docs
+}
+
+// ExistsDoc - проверка наличия документа в коллекции по id
+func (i *Index) ExistsDoc(id int) bool {
+	low, high := 0, len(i.Docs)
+	for low <= high {
+		mid := (low + high) / 2
+		if i.Docs[mid].ID == id {
+			return true
+		}
+		if i.Docs[mid].ID < id {
+			low = mid + 1
+		} else {
+			high = mid - 1
+		}
+	}
+	return false
 }
