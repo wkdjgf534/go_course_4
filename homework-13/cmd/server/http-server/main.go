@@ -3,9 +3,7 @@ package main
 
 import (
 	"fmt"
-	"net"
 	"net/http"
-	"sync"
 
 	"github.com/gorilla/mux"
 
@@ -14,13 +12,10 @@ import (
 	"go-course-4/homework-13/pkg/crawler/spider"
 	"go-course-4/homework-13/pkg/index"
 	"go-course-4/homework-13/pkg/middleware"
-	"go-course-4/homework-13/pkg/netsrv"
 	"go-course-4/homework-13/pkg/webapp"
 )
 
 const (
-	proto = "tcp4"
-	addr1 = ":8000"
 	addr2 = ":8080"
 	depth = 1
 )
@@ -42,37 +37,16 @@ func main() {
 	}
 	ind.AddDocuments(docs)
 
-	listener, err := net.Listen(proto, addr1)
+	mux := mux.NewRouter()
+	api := api.New(ind)
+	wa := webapp.New(ind)
+	apiEndpoints(api, mux)
+	webappEndpoints(wa, mux)
+	err := http.ListenAndServe(addr2, mux)
 	if err != nil {
-		fmt.Printf("Something went wrong with server on %s: %s\n", addr1, err)
+		fmt.Printf("Error from server2: %s", err)
 		return
 	}
-	defer listener.Close()
-
-	wg := &sync.WaitGroup{}
-	wg.Add(2)
-	go func() {
-		err = netsrv.Start(listener, ind)
-		if err != nil {
-			fmt.Printf("Error from the server1: %s", err)
-			return
-		}
-		wg.Done()
-	}()
-	go func() {
-		mux := mux.NewRouter()
-		api := api.New(ind)
-		wa := webapp.New(ind)
-		apiEndpoints(api, mux)
-		webappEndpoints(wa, mux)
-		err := http.ListenAndServe(addr2, mux)
-		if err != nil {
-			fmt.Printf("Error from server2: %s", err)
-			return
-		}
-		wg.Done()
-	}()
-	wg.Wait()
 
 }
 
