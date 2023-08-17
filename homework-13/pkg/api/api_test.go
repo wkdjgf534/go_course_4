@@ -26,11 +26,15 @@ func TestMain(m *testing.M) {
 	index.AddDocuments(docs)
 
 	api = New(index)
+	endpoints()
+	m.Run()
+}
+
+func endpoints() {
 	testMux.HandleFunc("/api/v1/docs/{word}", api.SearchDoc).Methods(http.MethodGet)
 	testMux.HandleFunc("/api/v1/docs", api.CreateDoc).Methods(http.MethodPost)
 	testMux.HandleFunc("/api/v1/docs/{id}", api.UpdateDoc).Methods(http.MethodPut)
 	testMux.HandleFunc("/api/v1/docs/{id}", api.DestroyDoc).Methods(http.MethodDelete)
-	m.Run()
 }
 
 func TestSearchDoc(t *testing.T) {
